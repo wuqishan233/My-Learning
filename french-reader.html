@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Text Reader</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg-top: #fff8ec;
+            --bg-bottom: #dcecff;
+            --panel: rgba(255, 255, 255, 0.84);
+            --panel-border: rgba(28, 59, 86, 0.12);
+            --text: #142235;
+            --muted: #53657a;
+            --primary: #0a7a6d;
+            --primary-strong: #07594f;
+            --secondary: #f08b45;
+            --shadow: 0 24px 70px rgba(20, 34, 53, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(240, 139, 69, 0.35), transparent 36%),
+                radial-gradient(circle at top right, rgba(10, 122, 109, 0.2), transparent 28%),
+                linear-gradient(160deg, var(--bg-top), var(--bg-bottom));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+
+        .page {
+            width: min(920px, 100%);
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .hero {
+            padding: 28px 28px 20px;
+            background:
+                linear-gradient(135deg, rgba(10, 122, 109, 0.12), rgba(240, 139, 69, 0.18));
+            border-bottom: 1px solid rgba(20, 34, 53, 0.08);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.65);
+            color: var(--primary-strong);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        h1 {
+            margin: 16px 0 10px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 0.95;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 60ch;
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 24px 28px 28px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        select,
+        textarea,
+        button {
+            font: inherit;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid rgba(20, 34, 53, 0.14);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+        }
+
+        select {
+            min-height: 48px;
+            padding: 0 14px;
+        }
+
+        textarea {
+            min-height: 300px;
+            padding: 18px;
+            resize: vertical;
+            line-height: 1.65;
+        }
+
+        textarea:focus,
+        select:focus {
+            outline: 2px solid rgba(10, 122, 109, 0.22);
+            border-color: rgba(10, 122, 109, 0.36);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+            align-items: center;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 22px;
+            cursor: pointer;
+            transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary), #139a8a);
+            color: #fff;
+            box-shadow: 0 12px 28px rgba(10, 122, 109, 0.24);
+            font-weight: 700;
+        }
+
+        .secondary-btn {
+            background: rgba(20, 34, 53, 0.08);
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .status {
+            min-height: 24px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .hint {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .preview {
+            margin-top: 18px;
+            padding: 18px;
+            border: 1px solid rgba(20, 34, 53, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        .preview-title {
+            margin: 0 0 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--muted);
+        }
+
+        .preview-text {
+            margin: 0;
+            line-height: 1.9;
+            font-size: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .sentence {
+            display: inline;
+            padding: 0.1em 0.18em;
+            border-radius: 0.45em;
+            transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .sentence.active {
+            background: rgba(240, 139, 69, 0.26);
+            color: #7a3f13;
+            box-shadow: 0 0 0 1px rgba(240, 139, 69, 0.22);
+        }
+
+        .word {
+            cursor: pointer;
+            border-radius: 0.25em;
+            padding: 0.05em 0.1em;
+            transition: background 120ms ease;
+        }
+
+        .word:hover {
+            background: rgba(10, 122, 109, 0.15);
+        }
+
+        .word.speaking {
+            background: rgba(10, 122, 109, 0.28);
+            color: var(--primary-strong);
+        }
+
+        .word-tooltip {
+            position: fixed;
+            z-index: 9999;
+            background: #142235;
+            color: #fff;
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            max-width: 220px;
+            box-shadow: 0 8px 24px rgba(20,34,53,0.22);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 150ms ease, transform 150ms ease;
+        }
+
+        .word-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .word-tooltip .tip-fr {
+            font-weight: 700;
+            color: #a8d8d2;
+            font-size: 0.82rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .word-tooltip .tip-zh {
+            display: block;
+        }
+
+        .word-tooltip .tip-loading {
+            color: #8ba7bb;
+            font-style: italic;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 16px;
+                align-items: stretch;
+            }
+
+            .page {
+                border-radius: 22px;
+            }
+
+            .hero,
+            .content {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .controls {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            textarea {
+                min-height: 240px;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <div class="eyebrow">French practice reader</div>
+            <h1>Paste French text. Read it aloud.</h1>
+            <p>Use this page to drop in any French paragraph, article, or dialogue and play it with your browser's speech engine.</p>
+        </section>
+
+        <section class="content">
+            <div class="controls">
+                <div class="field">
+                    <label for="voiceSelect">Voice</label>
+                    <select id="voiceSelect"></select>
+                </div>
+                <div class="field">
+                    <label for="rateSelect">Speed</label>
+                    <select id="rateSelect">
+                        <option value="0.7">Slow</option>
+                        <option value="0.9" selected>Normal</option>
+                        <option value="1.1">Fast</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="pitchSelect">Pitch</label>
+                    <select id="pitchSelect">
+                        <option value="0.9">Lower</option>
+                        <option value="1" selected>Natural</option>
+                        <option value="1.15">Brighter</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="translateLang">Translate to</label>
+                    <select id="translateLang">
+                        <option value="zh-CN">Chinese (简体)</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <label for="frenchText">French text</label>
+            <textarea id="frenchText" placeholder="Collez votre texte en francais ici...">Bonjour ! Je m'appelle Marie. J'habite a Lyon et j'apprends l'anglais. Le matin, je bois un cafe et je lis un article en francais.</textarea>
+
+            <section class="preview" aria-live="polite">
+                <p class="preview-title">Reading preview</p>
+                <p class="preview-text" id="previewText"></p>
+            </section>
+
+            <div class="actions">
+                <button class="primary-btn" id="readBtn" type="button">Read aloud</button>
+                <button class="secondary-btn" id="stopBtn" type="button">Stop</button>
+                <div class="status" id="status">Ready.</div>
+            </div>
+
+            <p class="hint">Tip: If no French voice appears, the page will still try to read the text using your browser's default speech voice.</p>
+        </section>
+    </main>
+
+    <div id="wordTooltip" class="word-tooltip" role="tooltip"></div>
+
+    <script>
+        const synth = window.speechSynthesis;
+        const voiceSelect = document.getElementById('voiceSelect');
+        const rateSelect = document.getElementById('rateSelect');
+        const pitchSelect = document.getElementById('pitchSelect');
+        const translateLang = document.getElementById('translateLang');
+        const frenchText = document.getElementById('frenchText');
+        const previewText = document.getElementById('previewText');
+        const statusEl = document.getElementById('status');
+        const readBtn = document.getElementById('readBtn');
+        const stopBtn = document.getElementById('stopBtn');
+
+        let availableVoices = [];
+        let currentSentenceNodes = [];
+        let queuedUtterances = [];
+        let playbackCancelled = false;
+
+        function setStatus(message) {
+            statusEl.textContent = message;
+        }
+
+        function loadVoices() {
+            availableVoices = synth.getVoices();
+            const frenchVoices = availableVoices.filter((voice) => voice.lang.toLowerCase().startsWith('fr'));
+            const voicesToShow = frenchVoices.length > 0 ? frenchVoices : availableVoices;
+
+            voiceSelect.innerHTML = '';
+
+            if (voicesToShow.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'Default browser voice';
+                option.value = '';
+                voiceSelect.appendChild(option);
+                return;
+            }
+
+            const saved = localStorage.getItem('frVoice');
+            voicesToShow.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                if (saved ? voice.name === saved : index === 0) {
+                    option.selected = true;
+                }
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        voiceSelect.addEventListener('change', () => {
+            localStorage.setItem('frVoice', voiceSelect.value);
+        });
+
+        function splitIntoSentences(text) {
+            return text
+                .split(/(?<=[.!?…])\s+|\n+/)
+                .map((sentence) => sentence.trim())
+                .filter(Boolean);
+        }
+
+        function renderPreview(activeIndex = -1) {
+            const sentences = splitIntoSentences(frenchText.value);
+            const fragment = document.createDocumentFragment();
+
+            currentSentenceNodes = sentences.map((sentence, index) => {
+                const span = document.createElement('span');
+                span.className = 'sentence';
+                if (index === activeIndex) {
+                    span.classList.add('active');
+                }
+
+                // Wrap each word in a clickable span, preserve spaces
+                sentence.split(/(\s+)/).forEach(token => {
+                    if (/^\s+$/.test(token)) {
+                        span.appendChild(document.createTextNode(token));
+                    } else if (token) {
+                        const wordSpan = document.createElement('span');
+                        wordSpan.className = 'word';
+                        wordSpan.textContent = token;
+                        span.appendChild(wordSpan);
+                    }
+                });
+
+                fragment.appendChild(span);
+                if (index < sentences.length - 1) {
+                    fragment.appendChild(document.createTextNode(' '));
+                }
+                return span;
+            });
+
+            previewText.replaceChildren(fragment);
+
+            if (currentSentenceNodes.length === 0) {
+                previewText.textContent = 'Your pasted text will appear here sentence by sentence.';
+            }
+        }
+
+        function setActiveSentence(index) {
+            currentSentenceNodes.forEach((node, nodeIndex) => {
+                node.classList.toggle('active', nodeIndex === index);
+            });
+
+            const activeNode = currentSentenceNodes[index];
+            if (activeNode) {
+                activeNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        }
+
+        function stopReading(statusMessage = 'Stopped.') {
+            playbackCancelled = true;
+            queuedUtterances = [];
+            synth.cancel();
+            setActiveSentence(-1);
+            setStatus(statusMessage);
+        }
+
+        function speakSentenceQueue(sentences, index, selectedVoice) {
+            if (playbackCancelled || index >= sentences.length) {
+                setActiveSentence(-1);
+                setStatus('Finished.');
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(sentences[index]);
+            queuedUtterances.push(utterance);
+
+            utterance.lang = selectedVoice?.lang || 'fr-FR';
+            utterance.rate = Number(rateSelect.value);
+            utterance.pitch = Number(pitchSelect.value);
+
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+
+            utterance.onstart = () => {
+                setActiveSentence(index);
+                setStatus(`Reading sentence ${index + 1} of ${sentences.length}...`);
+            };
+
+            utterance.onend = () => {
+                if (playbackCancelled) {
+                    return;
+                }
+                speakSentenceQueue(sentences, index + 1, selectedVoice);
+            };
+
+            utterance.onerror = () => {
+                playbackCancelled = true;
+                setActiveSentence(-1);
+                setStatus('Speech playback failed in this browser.');
+            };
+
+            synth.speak(utterance);
+        }
+
+        function readText() {
+            const text = frenchText.value.trim();
+            if (!text) {
+                setStatus('Paste some French text first.');
+                frenchText.focus();
+                renderPreview();
+                return;
+            }
+
+            const sentences = splitIntoSentences(text);
+            const selectedVoice = availableVoices.find((voice) => voice.name === voiceSelect.value);
+
+            playbackCancelled = false;
+            queuedUtterances = [];
+            synth.cancel();
+            renderPreview();
+            speakSentenceQueue(sentences, 0, selectedVoice);
+        }
+
+        function sayWord(wordSpan) {
+            const word = wordSpan.textContent.replace(/[.,!?;:'"»«…\-]/g, '').trim();
+            if (!word) return;
+            stopReading('');
+            const selectedVoice = availableVoices.find(v => v.name === voiceSelect.value);
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = selectedVoice?.lang || 'fr-FR';
+            utterance.rate = Number(rateSelect.value);
+            utterance.pitch = Number(pitchSelect.value);
+            if (selectedVoice) utterance.voice = selectedVoice;
+            utterance.onstart = () => wordSpan.classList.add('speaking');
+            utterance.onend = () => wordSpan.classList.remove('speaking');
+            utterance.onerror = () => wordSpan.classList.remove('speaking');
+            synth.speak(utterance);
+        }
+
+        const tooltip = document.getElementById('wordTooltip');
+        const translationCache = {};
+
+        function positionTooltip(anchorEl) {
+            const rect = anchorEl.getBoundingClientRect();
+            const tipW = 220;
+            let left = rect.left + rect.width / 2 - tipW / 2;
+            left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8));
+            const top = rect.top - 8; // will be shifted up via transform after measuring
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 10) + 'px';
+            // Use fixed positioning so we just use viewport coords
+            tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+        }
+
+        function showTooltip(wordSpan, word) {
+            const lang = translateLang.value;
+            const cacheKey = `${lang}:${word}`;
+            tooltip.innerHTML = `<span class="tip-fr">${word}</span><span class="tip-zh tip-loading">…</span>`;
+            tooltip.classList.add('visible');
+            positionTooltip(wordSpan);
+
+            if (translationCache[cacheKey]) {
+                renderTooltip(word, translationCache[cacheKey]);
+                return;
+            }
+
+            fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=fr&tl=${lang}&dt=t&q=${encodeURIComponent(word)}`)
+                .then(r => r.json())
+                .then(data => {
+                    const translated = data?.[0]?.map(part => part?.[0]).filter(Boolean).join('') || '—';
+                    translationCache[cacheKey] = translated;
+                    renderTooltip(word, translated);
+                })
+                .catch(() => renderTooltip(word, 'Translation unavailable'));
+        }
+
+        function renderTooltip(word, translated) {
+            tooltip.innerHTML = `<span class="tip-fr">${word}</span><span class="tip-zh">${translated}</span>`;
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.word')) hideTooltip();
+        });
+
+        previewText.addEventListener('click', (e) => {
+            const wordSpan = e.target.closest('.word');
+            if (wordSpan) {
+                sayWord(wordSpan);
+                const word = wordSpan.textContent.replace(/[.,!?;:'"»«…\-]/g, '').trim();
+                if (word) showTooltip(wordSpan, word);
+            }
+        });
+
+        readBtn.addEventListener('click', readText);
+
+        stopBtn.addEventListener('click', () => {
+            stopReading();
+        });
+
+        frenchText.addEventListener('keydown', (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+                readText();
+            }
+        });
+
+        frenchText.addEventListener('input', () => {
+            renderPreview();
+        });
+
+        loadVoices();
+        renderPreview();
+        if (typeof speechSynthesis !== 'undefined') {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Restore & persist translate language preference
+        const savedLang = localStorage.getItem('frTranslateLang');
+        if (savedLang) translateLang.value = savedLang;
+        translateLang.addEventListener('change', () => {
+            localStorage.setItem('frTranslateLang', translateLang.value);
+        });
+    </script>
+</body>
+</html>
