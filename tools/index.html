@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇫🇷 法语动词练习 — 总目录</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5; color: #1c1e21;
+            min-height: 100vh; padding: 40px 16px 64px;
+        }
+        header { text-align: center; margin-bottom: 48px; }
+        header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+        header p { color: #65676b; font-size: 1rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px; max-width: 760px; margin: 0 auto;
+        }
+        .level-card {
+            background: white; border-radius: 16px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+            padding: 28px 28px 24px;
+            text-decoration: none; color: inherit; display: block;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border-top: 5px solid var(--accent);
+        }
+        .level-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.13); }
+        .badge {
+            display: inline-block; font-size: 0.75rem; font-weight: 800;
+            color: var(--accent); background: var(--accent-light);
+            padding: 4px 12px; border-radius: 999px; margin-bottom: 14px;
+        }
+        .level-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+        .level-card p { color: #65676b; font-size: 0.92rem; line-height: 1.5; margin-bottom: 18px; }
+        .meta { display: flex; gap: 16px; }
+        .meta span {
+            font-size: 0.8rem; color: var(--accent); background: var(--accent-light);
+            padding: 4px 10px; border-radius: 8px; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🇫🇷 法语动词练习</h1>
+        <p>交互式例句朗读 · 按级别分组 · 点击即可发音</p>
+    </header>
+
+    <div class="grid">
+        <a class="level-card" href="a1-index.html" style="--accent:#1877f2;--accent-light:#e7f3ff;">
+            <div class="badge">DELF A1</div>
+            <h2>A1 级动词</h2>
+            <p>être, avoir, aller, faire… 50 个最核心的入门动词，涵盖日常交流、基础助动词与情态动词。</p>
+            <div class="meta">
+                <span>50 动词</span>
+                <span>10 组</span>
+                <span>300 例句</span>
+            </div>
+        </a>
+
+        <a class="level-card" href="a2-index.html" style="--accent:#7c3aed;--accent-light:#f3eeff;">
+            <div class="badge">DELF A2</div>
+            <h2>A2 级动词</h2>
+            <p>mettre, croire, se lever… 50 个进阶动词，涵盖自反动词、携带方向动词组与情感表达动词。</p>
+            <div class="meta">
+                <span>50 动词</span>
+                <span>10 组</span>
+                <span>300 例句</span>
+            </div>
+        </a>
+    </div>
+</body>
+</html>
