@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇫🇷 法语 A1 核心动词 — 首页</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1c1e21;
+            min-height: 100vh;
+            padding: 24px 16px 48px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        header p {
+            color: #65676b;
+            font-size: 1rem;
+        }
+        .progress-bar-wrap {
+            max-width: 480px;
+            margin: 16px auto 0;
+            background: #e4e6eb;
+            border-radius: 999px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #1877f2, #42b0ff);
+            border-radius: 999px;
+        }
+        .progress-label {
+            text-align: center;
+            font-size: 0.82rem;
+            color: #65676b;
+            margin-top: 6px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border-top: 4px solid var(--accent);
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .card-num {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+        .card-count {
+            font-size: 0.78rem;
+            color: #65676b;
+        }
+        .card h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #050505;
+            margin-bottom: 10px;
+        }
+        .verb-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .verb-list li {
+            font-size: 0.82rem;
+            background: #f0f2f5;
+            border-radius: 6px;
+            padding: 3px 8px;
+            color: #444;
+        }
+        .verb-list li span {
+            color: #888;
+            font-size: 0.75rem;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🇫🇷 法语 A1 核心动词</h1>
+        <p>50 个高频动词 · 每组 5 个 · 例句朗读</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill"></div>
+        </div>
+        <p class="progress-label">50 / 50 动词 · 共 10 组</p>
+    </header>
+
+    <div class="grid">
+        <a class="card" href="a1-1.html" style="--accent:#1877f2;--accent-light:#e7f3ff;">
+            <div class="card-header">
+                <span class="card-num">第 1 组 · 1–5</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>基础助动词 &amp; 高频动词</h2>
+            <ul class="verb-list">
+                <li>Être <span>是</span></li>
+                <li>Avoir <span>有</span></li>
+                <li>Aller <span>去</span></li>
+                <li>Venir <span>来</span></li>
+                <li>Faire <span>做</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-2.html" style="--accent:#7c3aed;--accent-light:#f3eeff;">
+            <div class="card-header">
+                <span class="card-num">第 2 组 · 6–10</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>情态动词 &amp; 言语动词</h2>
+            <ul class="verb-list">
+                <li>Dire <span>说</span></li>
+                <li>Pouvoir <span>能/可以</span></li>
+                <li>Vouloir <span>想要</span></li>
+                <li>Savoir <span>知道</span></li>
+                <li>Devoir <span>必须</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-3.html" style="--accent:#059669;--accent-light:#ecfdf5;">
+            <div class="card-header">
+                <span class="card-num">第 3 组 · 11–15</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>日常交流动词</h2>
+            <ul class="verb-list">
+                <li>Parler <span>说话</span></li>
+                <li>Manger <span>吃</span></li>
+                <li>Boire <span>喝</span></li>
+                <li>Écouter <span>听</span></li>
+                <li>Regarder <span>看</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-4.html" style="--accent:#d97706;--accent-light:#fffbeb;">
+            <div class="card-header">
+                <span class="card-num">第 4 组 · 16–20</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>生活与行动动词</h2>
+            <ul class="verb-list">
+                <li>Aimer <span>爱/喜欢</span></li>
+                <li>Habiter <span>居住</span></li>
+                <li>Travailler <span>工作</span></li>
+                <li>Jouer <span>玩/演奏</span></li>
+                <li>Prendre <span>拿/乘</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-5.html" style="--accent:#e74c3c;--accent-light:#fff0ef;">
+            <div class="card-header">
+                <span class="card-num">第 5 组 · 21–25</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>学习与商业动词</h2>
+            <ul class="verb-list">
+                <li>Donner <span>给</span></li>
+                <li>Apprendre <span>学习</span></li>
+                <li>Comprendre <span>理解</span></li>
+                <li>Acheter <span>购买</span></li>
+                <li>Vendre <span>卖</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-6.html" style="--accent:#0891b2;--accent-light:#ecfeff;">
+            <div class="card-header">
+                <span class="card-num">第 6 组 · 26–30</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>日常作息动词</h2>
+            <ul class="verb-list">
+                <li>Dormir <span>睡觉</span></li>
+                <li>Écrire <span>写</span></li>
+                <li>Lire <span>读</span></li>
+                <li>Étudier <span>学习</span></li>
+                <li>Chanter <span>唱歌</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-7.html" style="--accent:#16a34a;--accent-light:#f0fdf4;">
+            <div class="card-header">
+                <span class="card-num">第 7 组 · 31–35</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>运动与移动动词</h2>
+            <ul class="verb-list">
+                <li>Danser <span>跳舞</span></li>
+                <li>Marcher <span>走路</span></li>
+                <li>Courir <span>跑步</span></li>
+                <li>Attendre <span>等待</span></li>
+                <li>Arriver <span>到达</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-8.html" style="--accent:#9333ea;--accent-light:#faf5ff;">
+            <div class="card-header">
+                <span class="card-num">第 8 组 · 36–40</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>方向与空间动词</h2>
+            <ul class="verb-list">
+                <li>Partir <span>出发</span></li>
+                <li>Entrer <span>进入</span></li>
+                <li>Sortir <span>出去</span></li>
+                <li>Ouvrir <span>打开</span></li>
+                <li>Fermer <span>关闭</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-9.html" style="--accent:#db2777;--accent-light:#fdf2f8;">
+            <div class="card-header">
+                <span class="card-num">第 9 组 · 41–45</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>查询与交流动词</h2>
+            <ul class="verb-list">
+                <li>Rester <span>停留</span></li>
+                <li>Trouver <span>找到</span></li>
+                <li>Chercher <span>寻找</span></li>
+                <li>Demander <span>问/要求</span></li>
+                <li>Répondre <span>回答</span></li>
+            </ul>
+        </a>
+
+        <a class="card" href="a1-10.html" style="--accent:#ea580c;--accent-light:#fff7ed;">
+            <div class="card-header">
+                <span class="card-num">第 10 组 · 46–50</span>
+                <span class="card-count">6 例句 × 5</span>
+            </div>
+            <h2>活动与结果动词</h2>
+            <ul class="verb-list">
+                <li>Commencer <span>开始</span></li>
+                <li>Finir <span>结束</span></li>
+                <li>Tomber <span>跌倒</span></li>
+                <li>Jouer <span>玩耍</span></li>
+                <li>Nager <span>游泳</span></li>
+            </ul>
+        </a>
+    </div>
+</body>
+</html>
