@@ -16,7 +16,7 @@
         .fr { font-size: 1.05rem; font-weight: 600; color: #050505; display: block; margin-bottom: 2px; }
         .cn { font-size: 0.9rem; color: #65676b; line-height: 1.4; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <style>
         .nav { text-align: center; margin-bottom: 20px; }
@@ -80,15 +80,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Ils font du bruit dans le jardin.</span><span class="cn">他们在花园里制造噪音。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.7;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

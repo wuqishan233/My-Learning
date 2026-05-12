@@ -19,7 +19,7 @@
         .nav a { margin: 0 10px; color: #4f46e5; text-decoration: none; font-weight: bold; }
         .grammar-note { font-size: 0.85rem; color: #4f46e5; margin-top: 5px; font-style: italic; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a2-6.html">上一页 (26-30)</a>
@@ -89,15 +89,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Voyager permet de découvrir de nouvelles cultures.</span><span class="cn">旅行可以让人发现新的文化。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

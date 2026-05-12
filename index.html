@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇫🇷 法语自学工具</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a3a6b 0%, #2d6a4f 100%);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 24px;
+        }
+        .card {
+            background: white; border-radius: 24px;
+            padding: 48px 44px 40px; max-width: 480px; width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .flag { font-size: 3.5rem; margin-bottom: 16px; display: block; }
+        h1 { font-size: 1.8rem; font-weight: 800; color: #1c1e21; margin-bottom: 8px; }
+        p { color: #65676b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 32px; }
+        .enter-btn {
+            display: inline-block; padding: 14px 40px;
+            background: #1877f2; color: white;
+            text-decoration: none; border-radius: 999px;
+            font-size: 1rem; font-weight: 700;
+            transition: background 0.15s, transform 0.15s;
+            box-shadow: 0 4px 16px rgba(24,119,242,0.35);
+        }
+        .enter-btn:hover { background: #0e5fc0; transform: translateY(-2px); }
+        .topics { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+        .topic {
+            font-size: 0.78rem; font-weight: 600; padding: 5px 13px;
+            border-radius: 999px; background: #f0f2f5; color: #65676b;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <span class="flag">🇫🇷</span>
+        <h1>法语自学工具</h1>
+        <p>互动式朗读练习 · IPA 发音注音 · 词汇图示<br>支持语音设置，点击即可发音</p>
+        <a class="enter-btn" href="tools/index.html">进入学习 →</a>
+        <div class="topics">
+            <span class="topic">📝 A1/A2 动词</span>
+            <span class="topic">📚 身体部位</span>
+            <span class="topic">🔢 数字 0–100</span>
+        </div>
+    </div>
+</body>
+</html>

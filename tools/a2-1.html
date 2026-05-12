@@ -19,7 +19,7 @@
         .nav a { margin: 0 10px; color: #7c3aed; text-decoration: none; font-weight: bold; }
         .grammar-note { font-size: 0.85rem; color: #7c3aed; margin-top: 5px; font-style: italic; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a2-index.html">🏠 首页</a>
@@ -86,15 +86,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Ils choisissent leurs nouveaux meubles.</span><span class="cn">他们正在挑选新家具。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

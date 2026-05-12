@@ -2,16 +2,19 @@
 
 A collection of interactive HTML tools for French language learning.
 
-## Tools
+## 🌐 [Open Learning Hub](index.html)
 
-### 🇫🇷 [French Verb Practice](tools/index.html) — A1 & A2 · 100 Verbs
-Interactive sentence practice covering 100 French verbs (A1 + A2), 5 verbs per page with 6 example sentences each. Includes Chinese translations and text-to-speech playback (Web Speech API, 0.7× speed).
+All tools are accessible from the main hub page. Available content:
 
-### 📖 [french-reader.html](tools/french-reader.html) — French Text Reader
-A full-featured French reading tool. Paste or load any French text, then click individual words or sentences to hear them read aloud. Designed to support reading comprehension and pronunciation practice.
+- **A1 级动词** — 50 core A1 verbs, 10 groups, 300 example sentences
+- **A2 级动词** — 50 A2 verbs including reflexive verbs and emotional expressions
+- **身体部位** — 28 body parts with IPA pronunciation, Chinese translations, and interactive SVG diagram
+- **数字 0–100** — French numbers with click-to-speak and sequential read-aloud
+- **法语朗读器** — Paste any French text and listen sentence by sentence
 
-### 🔢 [Nombre.html](tools/Nombre.html) — French Numbers 0–100
-A simple reference page listing French number words from 0 (*zéro*) to 100 (*cent*).
+## ⚙️ Global Settings
+
+Every page includes a floating ⚙️ button (bottom-right) to adjust TTS voice and reading speed. Settings are saved in `localStorage` and apply across all pages.
 
 ## Requirements
 

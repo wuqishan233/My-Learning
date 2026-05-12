@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>法语身体部位词汇</title>
+    <script src="settings.js"></script>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -595,11 +596,7 @@
 
     function speakText(text) {
         const clean = text.replace(/\(.*?\)/g, '').replace(/m\.|f\./g, '').replace(/\//g, '').trim();
-        const utter = new SpeechSynthesisUtterance(clean);
-        utter.lang = 'fr-FR';
-        utter.rate = 0.85;
-        speechSynthesis.cancel();
-        speechSynthesis.speak(utter);
+        frSettings.speak(clean);
     }
 
     function filterCards() {

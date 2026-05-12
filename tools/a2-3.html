@@ -19,7 +19,7 @@
         .nav a { margin: 0 10px; color: #0284c7; text-decoration: none; font-weight: bold; }
         .grammar-note { font-size: 0.85rem; color: #0284c7; margin-top: 5px; font-style: italic; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a2-2.html">上一页 (06-10)</a>
@@ -87,15 +87,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Ils s'habillent en blanc pour la fête.</span><span class="cn">他们穿白色衣服去参加派对。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@
         .nav { text-align: center; margin-bottom: 20px; }
         .nav a { margin: 0 10px; color: #16a34a; text-decoration: none; font-weight: bold; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a1-6.html">上一页 (26-30)</a>
@@ -84,15 +84,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Elles arrivent demain de Paris.</span><span class="cn">她们明天从巴黎过来。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

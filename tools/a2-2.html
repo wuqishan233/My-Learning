@@ -19,7 +19,7 @@
         .nav a { margin: 0 10px; color: #a21caf; text-decoration: none; font-weight: bold; }
         .grammar-note { font-size: 0.85rem; color: #c026d3; margin-top: 5px; font-style: italic; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a2-1.html">上一页 (01-05)</a>
@@ -88,15 +88,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Ils posent du carrelage dans la cuisine.</span><span class="cn">他们正在厨房铺瓷砖。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@
         .nav a { margin: 0 10px; color: #15803d; text-decoration: none; font-weight: bold; }
         .grammar-note { font-size: 0.85rem; color: #16a34a; margin-top: 5px; font-style: italic; }
     </style>
-</head>
+    <script src="settings.js"></script></head>
 <body>
     <div class="nav">
         <a href="a2-3.html">上一页 (11-15)</a>
@@ -86,15 +86,6 @@
         <div class="item"><button class="play-btn" onclick="say(this)">▶</button><div class="text-group"><span class="fr">Ils se sont perdus dans la forêt.</span><span class="cn">他们在森林里迷路了。</span></div></div>
     </div>
 
-    <script>
-        function say(btn) {
-            const txt = btn.closest('.item').querySelector('.fr').textContent;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(txt);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
-    </script>
+    <script src="verb-drill.js"></script>
 </body>
 </html>
