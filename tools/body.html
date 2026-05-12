@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语身体部位词汇</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #f0f2f5;
+            color: #1c1e21;
+        }
+        h1 { text-align: center; font-size: 1.5rem; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: #65676b; font-size: 0.9rem; margin-bottom: 18px; }
+        .nav { text-align: center; margin-bottom: 20px; }
+        .nav a { margin: 0 10px; color: #1877f2; text-decoration: none; font-weight: bold; }
+
+        /* ── Diagram panels ── */
+        .diagrams { display: flex; gap: 16px; justify-content: center; margin-bottom: 22px; flex-wrap: wrap; }
+        .diagram-panel {
+            background: white; border-radius: 16px; padding: 12px 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center;
+        }
+        .diagram-panel h3 { margin: 0 0 8px; font-size: 0.82rem; color: #65676b; font-weight: 600; }
+
+        /* SVG body-part overlay — transparent until hover/highlight */
+        .bp-ov {
+            fill: transparent; stroke: transparent; stroke-width: 2;
+            cursor: pointer; pointer-events: all;
+            transition: fill 0.18s, stroke 0.18s;
+        }
+        .bp-ov:hover { fill: rgba(255,235,59,0.35); stroke: rgba(245,124,0,0.7); }
+        .bp-ov.hl {
+            fill: rgba(255,200,30,0.52); stroke: #e65100; stroke-width: 2.5;
+            filter: drop-shadow(0 0 5px rgba(230,81,0,0.45));
+        }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: #1877f2;
+            border-bottom: 2px solid #e4e6eb; padding-bottom: 6px; margin: 20px 0 10px;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        .card {
+            background: white; border-radius: 12px; padding: 12px 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex; align-items: center;
+            gap: 12px; cursor: pointer; border: 2px solid transparent;
+            transition: box-shadow 0.15s, border-color 0.2s, background 0.2s;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(24,119,242,0.15); }
+        .card.hl { background: #fff8e1; border-color: #f57c00; }
+        .play-btn {
+            background: #e7f3ff; color: #1877f2; border: none; border-radius: 50%;
+            width: 38px; height: 38px; cursor: pointer; flex-shrink: 0; font-size: 16px;
+            display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+        }
+        .play-btn:hover { background: #cce0ff; }
+        .play-btn.playing { background: #1877f2; color: white; }
+        .text-group { flex-grow: 1; min-width: 0; }
+        .fr { font-size: 1.05rem; font-weight: 700; color: #050505; display: block; margin-bottom: 2px; }
+        .ipa { font-size: 0.82rem; color: #888; display: block; margin-bottom: 2px; font-style: italic; }
+        .cn { font-size: 0.95rem; color: #e05a00; font-weight: 600; display: block; }
+
+        .search-bar { display: flex; justify-content: center; margin-bottom: 18px; }
+        .search-bar input {
+            width: 100%; max-width: 400px; padding: 8px 14px;
+            border: 2px solid #d8dde4; border-radius: 20px;
+            font-size: 0.95rem; outline: none; transition: border-color 0.15s;
+        }
+        .search-bar input:focus { border-color: #1877f2; }
+        .no-result { text-align: center; color: #999; padding: 30px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="nav">
+    <a href="index.html">🏠 首页</a>
+</div>
+
+<h1>🇫🇷 身体部位 Le Corps Humain</h1>
+<p class="subtitle">悬停图示高亮部位 · 点击卡片朗读发音</p>
+
+<!-- ══════════════════════ DIAGRAMS ══════════════════════ -->
+<div class="diagrams">
+
+  <!-- Full body -->
+  <div class="diagram-panel">
+    <h3>全身 — Corps entier</h3>
+    <svg width="150" viewBox="0 0 220 525" xmlns="http://www.w3.org/2000/svg">
+      <!-- BASE SHAPES -->
+      <path d="M66,55 C64,28 78,6 110,5 C142,6 156,28 154,55 C150,30 136,18 110,18 C84,18 70,30 66,55 Z" fill="#795548"/>
+      <ellipse cx="110" cy="63" rx="44" ry="49" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="66"  cy="63" rx="9" ry="14" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="154" cy="63" rx="9" ry="14" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M88,50 Q98,44 108,50"  fill="none" stroke="#5d4037" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M112,50 Q122,44 132,50" fill="none" stroke="#5d4037" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="98"  cy="57" rx="9" ry="7" fill="white" stroke="#ccc" stroke-width="1"/>
+      <circle  cx="98"  cy="57" r="4" fill="#5d4037"/>
+      <ellipse cx="122" cy="57" rx="9" ry="7" fill="white" stroke="#ccc" stroke-width="1"/>
+      <circle  cx="122" cy="57" r="4" fill="#5d4037"/>
+      <path d="M108,65 L106,74 Q110,77 114,74 L112,65" fill="none" stroke="#d4956a" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M100,80 Q110,87 120,80" fill="none" stroke="#c0606a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M100,80 Q110,84 120,80 Q110,89 100,80 Z" fill="#e07878" opacity="0.45"/>
+      <rect x="97" y="110" width="26" height="23" rx="5" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M52,132 L168,132 L163,275 L57,275 Z"    fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M52,132 L32,132 L16,275 L40,275 Z"      fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M168,132 L188,132 L204,275 L180,275 Z"  fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="28"  cy="291" rx="14" ry="20" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="13"  cy="306" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="22"  cy="312" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="32"  cy="314" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="42"  cy="309" rx="4.5" ry="10" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="192" cy="291" rx="14" ry="20" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="207" cy="306" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="198" cy="312" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="188" cy="314" rx="5"  ry="11" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <ellipse cx="178" cy="309" rx="4.5" ry="10" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.2"/>
+      <path d="M57,275 L163,275 L160,305 L60,305 Z"    fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="60"  y="305" width="46" height="95" rx="9" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="114" y="305" width="46" height="95" rx="9" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="62"  y="400" width="42" height="78" rx="7" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="116" y="400" width="42" height="78" rx="7" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="64"  y="476" width="38" height="18" rx="6" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <rect x="118" y="476" width="38" height="18" rx="6" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M50,492 L104,492 L104,513 Q96,517 50,517 Z"   fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M116,492 L170,492 L170,513 Q170,517 116,513 Z" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <!-- INTERACTIVE OVERLAYS -->
+      <ellipse id="bp-tete"     class="bp-ov" data-part="tete"     cx="110" cy="63" rx="44" ry="49"/>
+      <path    id="bp-cheveux"  class="bp-ov" data-part="cheveux"  d="M66,55 C64,28 78,6 110,5 C142,6 156,28 154,55 C150,30 136,18 110,18 C84,18 70,30 66,55 Z"/>
+      <ellipse id="bp-visage"   class="bp-ov" data-part="visage"   cx="110" cy="72" rx="38" ry="40"/>
+      <path    id="bp-front"    class="bp-ov" data-part="front"    d="M74,36 Q110,20 146,36 L142,56 Q110,42 78,56 Z"/>
+      <g id="bp-oreilles" class="bp-ov" data-part="oreilles">
+        <ellipse cx="66"  cy="63" rx="12" ry="17"/>
+        <ellipse cx="154" cy="63" rx="12" ry="17"/>
+      </g>
+      <g id="bp-oeil" class="bp-ov" data-part="oeil">
+        <ellipse cx="98"  cy="57" rx="14" ry="11"/>
+        <ellipse cx="122" cy="57" rx="14" ry="11"/>
+      </g>
+      <g id="bp-sourcils" class="bp-ov" data-part="sourcils">
+        <path d="M85,43 Q98,37 111,43 L111,53 Q98,47 85,53 Z"/>
+        <path d="M109,43 Q122,37 135,43 L135,53 Q122,47 109,53 Z"/>
+      </g>
+      <g id="bp-cils" class="bp-ov" data-part="cils">
+        <ellipse cx="98"  cy="63" rx="11" ry="7"/>
+        <ellipse cx="122" cy="63" rx="11" ry="7"/>
+      </g>
+      <g id="bp-joues" class="bp-ov" data-part="joues">
+        <ellipse cx="82"  cy="68" rx="13" ry="12"/>
+        <ellipse cx="138" cy="68" rx="13" ry="12"/>
+      </g>
+      <ellipse id="bp-nez"      class="bp-ov" data-part="nez"      cx="110" cy="70" rx="10" ry="12"/>
+      <ellipse id="bp-bouche"   class="bp-ov" data-part="bouche"   cx="110" cy="83" rx="14" ry="9"/>
+      <ellipse id="bp-levres"   class="bp-ov" data-part="levres"   cx="110" cy="83" rx="12" ry="7"/>
+      <ellipse id="bp-dents"    class="bp-ov" data-part="dents"    cx="110" cy="83" rx="9"  ry="5"/>
+      <ellipse id="bp-langue"   class="bp-ov" data-part="langue"   cx="110" cy="86" rx="7"  ry="4"/>
+      <ellipse id="bp-menton"   class="bp-ov" data-part="menton"   cx="110" cy="100" rx="19" ry="12"/>
+      <rect    id="bp-cou"      class="bp-ov" data-part="cou"      x="93" y="107" width="34" height="29"/>
+      <g id="bp-epaule" class="bp-ov" data-part="epaule">
+        <ellipse cx="52"  cy="133" rx="22" ry="16"/>
+        <ellipse cx="168" cy="133" rx="22" ry="16"/>
+      </g>
+      <path id="bp-poitrine" class="bp-ov" data-part="poitrine" d="M60,132 L160,132 L157,200 L63,200 Z"/>
+      <path id="bp-dos"      class="bp-ov" data-part="dos"      d="M60,132 L160,132 L163,275 L57,275 Z"/>
+      <g id="bp-bras" class="bp-ov" data-part="bras">
+        <path d="M32,132 L52,132 L40,275 L16,275 Z"/>
+        <path d="M168,132 L188,132 L204,275 L180,275 Z"/>
+      </g>
+      <g id="bp-main" class="bp-ov" data-part="main">
+        <ellipse cx="28"  cy="291" rx="18" ry="24"/>
+        <ellipse cx="192" cy="291" rx="18" ry="24"/>
+      </g>
+      <g id="bp-doigts" class="bp-ov" data-part="doigts">
+        <ellipse cx="13"  cy="306" rx="7"   ry="13"/>
+        <ellipse cx="22"  cy="312" rx="7"   ry="13"/>
+        <ellipse cx="32"  cy="314" rx="7"   ry="13"/>
+        <ellipse cx="42"  cy="309" rx="6.5" ry="12"/>
+        <ellipse cx="207" cy="306" rx="7"   ry="13"/>
+        <ellipse cx="198" cy="312" rx="7"   ry="13"/>
+        <ellipse cx="188" cy="314" rx="7"   ry="13"/>
+        <ellipse cx="178" cy="309" rx="6.5" ry="12"/>
+      </g>
+      <g id="bp-ongles" class="bp-ov" data-part="ongles">
+        <ellipse cx="13"  cy="297" rx="4"   ry="3.5"/>
+        <ellipse cx="22"  cy="303" rx="4"   ry="3.5"/>
+        <ellipse cx="32"  cy="305" rx="4"   ry="3.5"/>
+        <ellipse cx="42"  cy="300" rx="3.5" ry="3"/>
+        <ellipse cx="207" cy="297" rx="4"   ry="3.5"/>
+        <ellipse cx="198" cy="303" rx="4"   ry="3.5"/>
+        <ellipse cx="188" cy="305" rx="4"   ry="3.5"/>
+        <ellipse cx="178" cy="300" rx="3.5" ry="3"/>
+      </g>
+      <path id="bp-ventre"   class="bp-ov" data-part="ventre"   d="M61,200 L159,200 L163,275 L57,275 Z"/>
+      <g id="bp-cuisse" class="bp-ov" data-part="cuisse">
+        <rect x="58"  y="305" width="50" height="97" rx="9"/>
+        <rect x="112" y="305" width="50" height="97" rx="9"/>
+      </g>
+      <g id="bp-jambe" class="bp-ov" data-part="jambe">
+        <rect x="60"  y="400" width="46" height="80" rx="7"/>
+        <rect x="114" y="400" width="46" height="80" rx="7"/>
+      </g>
+      <g id="bp-cheville" class="bp-ov" data-part="cheville">
+        <rect x="62"  y="476" width="42" height="20" rx="6"/>
+        <rect x="116" y="476" width="42" height="20" rx="6"/>
+      </g>
+      <g id="bp-pied" class="bp-ov" data-part="pied">
+        <path d="M48,492 L106,492 L106,516 Q96,518 48,518 Z"/>
+        <path d="M114,492 L172,492 L172,516 Q172,518 114,518 Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Face zoom -->
+  <div class="diagram-panel">
+    <h3>面部特写 — Visage détaillé</h3>
+    <svg width="200" viewBox="0 0 200 218" xmlns="http://www.w3.org/2000/svg">
+      <!-- BASE SHAPES -->
+      <path d="M28,85 C26,48 42,8 100,6 C158,8 174,48 172,85 C167,50 148,24 100,22 C52,24 33,50 28,85 Z" fill="#795548"/>
+      <ellipse cx="100" cy="115" rx="73" ry="90" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="27"  cy="112" rx="14" ry="24" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="173" cy="112" rx="14" ry="24" fill="#fdd9b5" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M58,76 Q76,67 94,76"   fill="none" stroke="#5d4037" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M106,76 Q124,67 142,76" fill="none" stroke="#5d4037" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="76"  cy="93" rx="16" ry="12" fill="white" stroke="#aaa" stroke-width="1"/>
+      <circle  cx="76"  cy="93" r="7" fill="#5d4037"/>
+      <circle  cx="78"  cy="91" r="2.5" fill="white"/>
+      <ellipse cx="124" cy="93" rx="16" ry="12" fill="white" stroke="#aaa" stroke-width="1"/>
+      <circle  cx="124" cy="93" r="7" fill="#5d4037"/>
+      <circle  cx="126" cy="91" r="2.5" fill="white"/>
+      <path d="M61,101 L58,108 M67,104 L65,111 M76,106 L75,113 M85,104 L87,111 M91,101 L94,108"    fill="none" stroke="#5d4037" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M109,101 L106,108 M115,104 L113,111 M124,106 L123,113 M133,104 L135,111 M139,101 L142,108" fill="none" stroke="#5d4037" stroke-width="1.5" stroke-linecap="round"/>
+      <ellipse cx="48"  cy="122" rx="18" ry="14" fill="#ffb3b3" opacity="0.35"/>
+      <ellipse cx="152" cy="122" rx="18" ry="14" fill="#ffb3b3" opacity="0.35"/>
+      <path d="M97,107 L93,126 Q100,132 107,126 L103,107" fill="none" stroke="#d4956a" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="93"  cy="126" rx="6" ry="5" fill="none" stroke="#d4956a" stroke-width="1.5"/>
+      <ellipse cx="107" cy="126" rx="6" ry="5" fill="none" stroke="#d4956a" stroke-width="1.5"/>
+      <path d="M80,146 Q100,155 120,146" fill="none" stroke="#c0606a" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M80,146 Q90,142 100,146 Q110,142 120,146 Q100,136 80,146 Z" fill="#e07878" opacity="0.55"/>
+      <path d="M80,146 Q100,158 120,146 Q100,153 80,146 Z" fill="#e07878" opacity="0.45"/>
+      <!-- INTERACTIVE OVERLAYS -->
+      <ellipse id="fbp-tete"     class="bp-ov" data-part="tete"     cx="100" cy="115" rx="73" ry="90"/>
+      <path    id="fbp-cheveux"  class="bp-ov" data-part="cheveux"  d="M28,85 C26,48 42,8 100,6 C158,8 174,48 172,85 C167,50 148,24 100,22 C52,24 33,50 28,85 Z"/>
+      <ellipse id="fbp-visage"   class="bp-ov" data-part="visage"   cx="100" cy="124" rx="68" ry="78"/>
+      <path    id="fbp-front"    class="bp-ov" data-part="front"    d="M36,72 Q100,45 164,72 L156,90 Q100,67 44,90 Z"/>
+      <g id="fbp-oreilles" class="bp-ov" data-part="oreilles">
+        <ellipse cx="27"  cy="112" rx="18" ry="27"/>
+        <ellipse cx="173" cy="112" rx="18" ry="27"/>
+      </g>
+      <g id="fbp-sourcils" class="bp-ov" data-part="sourcils">
+        <path d="M55,65 Q76,56 97,65 L97,80 Q76,71 55,80 Z"/>
+        <path d="M103,65 Q124,56 145,65 L145,80 Q124,71 103,80 Z"/>
+      </g>
+      <g id="fbp-oeil" class="bp-ov" data-part="oeil">
+        <ellipse cx="76"  cy="93" rx="21" ry="17"/>
+        <ellipse cx="124" cy="93" rx="21" ry="17"/>
+      </g>
+      <g id="fbp-cils" class="bp-ov" data-part="cils">
+        <ellipse cx="76"  cy="105" rx="19" ry="9"/>
+        <ellipse cx="124" cy="105" rx="19" ry="9"/>
+      </g>
+      <g id="fbp-joues" class="bp-ov" data-part="joues">
+        <ellipse cx="48"  cy="122" rx="24" ry="20"/>
+        <ellipse cx="152" cy="122" rx="24" ry="20"/>
+      </g>
+      <ellipse id="fbp-nez"    class="bp-ov" data-part="nez"    cx="100" cy="118" rx="20" ry="22"/>
+      <ellipse id="fbp-bouche" class="bp-ov" data-part="bouche" cx="100" cy="148" rx="26" ry="16"/>
+      <ellipse id="fbp-levres" class="bp-ov" data-part="levres" cx="100" cy="148" rx="22" ry="12"/>
+      <ellipse id="fbp-dents"  class="bp-ov" data-part="dents"  cx="100" cy="149" rx="16" ry="7"/>
+      <ellipse id="fbp-langue" class="bp-ov" data-part="langue" cx="100" cy="151" rx="12" ry="5"/>
+      <ellipse id="fbp-menton" class="bp-ov" data-part="menton" cx="100" cy="182" rx="32" ry="20"/>
+    </svg>
+  </div>
+
+</div>
+<!-- ══════════════════════════════════════════════════════ -->
+
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜索法语或中文…" oninput="filterCards()">
+</div>
+
+<div id="allContent">
+
+    <div class="section-title" data-section>🧠 头部 — La Tête</div>
+    <div class="grid">
+        <div class="card" data-part="tete" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la tête</span>
+                <span class="ipa">[la tɛt]</span>
+                <span class="cn">头</span>
+            </div>
+        </div>
+        <div class="card" data-part="visage" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le visage</span>
+                <span class="ipa">[lə vi.zaʒ]</span>
+                <span class="cn">脸</span>
+            </div>
+        </div>
+        <div class="card" data-part="cheveux" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les cheveux</span>
+                <span class="ipa">[le ʃə.vø]</span>
+                <span class="cn">头发</span>
+            </div>
+        </div>
+        <div class="card" data-part="front" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le front</span>
+                <span class="ipa">[lə fʁɔ̃]</span>
+                <span class="cn">额头</span>
+            </div>
+        </div>
+        <div class="card" data-part="oeil" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">un œil / les yeux</span>
+                <span class="ipa">[œ̃ œj / le zjø]</span>
+                <span class="cn">眼 / 眼睛（复数）</span>
+            </div>
+        </div>
+        <div class="card" data-part="oreilles" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les oreilles</span>
+                <span class="ipa">[le zɔ.ʁɛj]</span>
+                <span class="cn">耳朵</span>
+            </div>
+        </div>
+        <div class="card" data-part="sourcils" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les sourcils m.</span>
+                <span class="ipa">[le suʁ.si]</span>
+                <span class="cn">眉毛</span>
+            </div>
+        </div>
+        <div class="card" data-part="cils" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les cils m.</span>
+                <span class="ipa">[le sil]</span>
+                <span class="cn">睫毛</span>
+            </div>
+        </div>
+        <div class="card" data-part="joues" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les joues f.</span>
+                <span class="ipa">[le ʒu]</span>
+                <span class="cn">脸蛋</span>
+            </div>
+        </div>
+        <div class="card" data-part="nez" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le nez</span>
+                <span class="ipa">[lə ne]</span>
+                <span class="cn">鼻子</span>
+            </div>
+        </div>
+        <div class="card" data-part="bouche" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la bouche</span>
+                <span class="ipa">[la buʃ]</span>
+                <span class="cn">嘴巴</span>
+            </div>
+        </div>
+        <div class="card" data-part="levres" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les lèvres f.</span>
+                <span class="ipa">[le lɛvʁ]</span>
+                <span class="cn">嘴唇</span>
+            </div>
+        </div>
+        <div class="card" data-part="langue" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la langue</span>
+                <span class="ipa">[la lɑ̃ɡ]</span>
+                <span class="cn">舌头</span>
+            </div>
+        </div>
+        <div class="card" data-part="dents" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les dents f.</span>
+                <span class="ipa">[le dɑ̃]</span>
+                <span class="cn">牙齿</span>
+            </div>
+        </div>
+        <div class="card" data-part="menton" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le menton</span>
+                <span class="ipa">[lə mɑ̃.tɔ̃]</span>
+                <span class="cn">下巴</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title" data-section>💪 躯干与四肢 — Le Corps &amp; Les Membres</div>
+    <div class="grid">
+        <div class="card" data-part="cou" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le cou</span>
+                <span class="ipa">[lə ku]</span>
+                <span class="cn">头颈</span>
+            </div>
+        </div>
+        <div class="card" data-part="epaule" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">l'épaule</span>
+                <span class="ipa">[le.pol]</span>
+                <span class="cn">肩膀</span>
+            </div>
+        </div>
+        <div class="card" data-part="poitrine" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la poitrine</span>
+                <span class="ipa">[la pwa.tʁin]</span>
+                <span class="cn">胸部</span>
+            </div>
+        </div>
+        <div class="card" data-part="dos" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le dos</span>
+                <span class="ipa">[lə do]</span>
+                <span class="cn">背部</span>
+            </div>
+        </div>
+        <div class="card" data-part="bras" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le bras</span>
+                <span class="ipa">[lə bʁa]</span>
+                <span class="cn">手臂</span>
+            </div>
+        </div>
+        <div class="card" data-part="main" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la main</span>
+                <span class="ipa">[la mɛ̃]</span>
+                <span class="cn">手</span>
+            </div>
+        </div>
+        <div class="card" data-part="doigts" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les doigts m.</span>
+                <span class="ipa">[le dwa]</span>
+                <span class="cn">手指</span>
+            </div>
+        </div>
+        <div class="card" data-part="ongles" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">les ongles</span>
+                <span class="ipa">[le zɔ̃ɡl]</span>
+                <span class="cn">指甲</span>
+            </div>
+        </div>
+        <div class="card" data-part="ventre" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le ventre</span>
+                <span class="ipa">[lə vɑ̃tʁ]</span>
+                <span class="cn">肚子</span>
+            </div>
+        </div>
+        <div class="card" data-part="cuisse" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la cuisse</span>
+                <span class="ipa">[la kɥis]</span>
+                <span class="cn">大腿</span>
+            </div>
+        </div>
+        <div class="card" data-part="jambe" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la jambe</span>
+                <span class="ipa">[la ʒɑ̃b]</span>
+                <span class="cn">小腿</span>
+            </div>
+        </div>
+        <div class="card" data-part="cheville" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">la cheville</span>
+                <span class="ipa">[la ʃə.vij]</span>
+                <span class="cn">脚踝</span>
+            </div>
+        </div>
+        <div class="card" data-part="pied" onclick="speakCard(this)">
+            <button class="play-btn" onclick="event.stopPropagation();speakCard(this.parentElement)">▶</button>
+            <div class="text-group">
+                <span class="fr">le pied</span>
+                <span class="ipa">[lə pje]</span>
+                <span class="cn">脚 / 足</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="no-result" id="noResult">😕 没有找到匹配的词汇</div>
+
+<script>
+    // part key → SVG overlay IDs (body + face diagrams)
+    const partToSvg = {
+        tete:     ['bp-tete',     'fbp-tete'],
+        visage:   ['bp-visage',   'fbp-visage'],
+        cheveux:  ['bp-cheveux',  'fbp-cheveux'],
+        front:    ['bp-front',    'fbp-front'],
+        oeil:     ['bp-oeil',     'fbp-oeil'],
+        oreilles: ['bp-oreilles', 'fbp-oreilles'],
+        sourcils: ['bp-sourcils', 'fbp-sourcils'],
+        cils:     ['bp-cils',     'fbp-cils'],
+        joues:    ['bp-joues',    'fbp-joues'],
+        nez:      ['bp-nez',      'fbp-nez'],
+        bouche:   ['bp-bouche',   'fbp-bouche'],
+        levres:   ['bp-levres',   'fbp-levres'],
+        dents:    ['bp-dents',    'fbp-dents'],
+        langue:   ['bp-langue',   'fbp-langue'],
+        menton:   ['bp-menton',   'fbp-menton'],
+        cou:      ['bp-cou'],
+        epaule:   ['bp-epaule'],
+        poitrine: ['bp-poitrine'],
+        dos:      ['bp-dos'],
+        bras:     ['bp-bras'],
+        main:     ['bp-main'],
+        doigts:   ['bp-doigts'],
+        ongles:   ['bp-ongles'],
+        ventre:   ['bp-ventre'],
+        cuisse:   ['bp-cuisse'],
+        jambe:    ['bp-jambe'],
+        cheville: ['bp-cheville'],
+        pied:     ['bp-pied'],
+    };
+
+    let pinned = null;
+
+    function clearHighlights() {
+        document.querySelectorAll('.bp-ov.hl').forEach(el => el.classList.remove('hl'));
+        document.querySelectorAll('.card.hl').forEach(el => el.classList.remove('hl'));
+    }
+
+    function applyHighlight(partKey) {
+        clearHighlights();
+        if (!partKey) return;
+        (partToSvg[partKey] || []).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hl');
+        });
+        const card = document.querySelector(`.card[data-part="${partKey}"]`);
+        if (card) card.classList.add('hl');
+    }
+
+    // SVG overlay hover & click
+    document.querySelectorAll('.bp-ov').forEach(el => {
+        el.addEventListener('mouseenter', () => { if (!pinned) applyHighlight(el.dataset.part); });
+        el.addEventListener('mouseleave', () => { if (!pinned) clearHighlights(); });
+        el.addEventListener('click', () => {
+            const part = el.dataset.part;
+            if (pinned === part) { pinned = null; clearHighlights(); }
+            else { pinned = part; applyHighlight(part); speakPart(part); }
+        });
+    });
+
+    function speakCard(card) {
+        const part = card.dataset.part;
+        if (pinned === part) { pinned = null; clearHighlights(); }
+        else { pinned = part; applyHighlight(part); }
+        speakText(card.querySelector('.fr').textContent);
+    }
+
+    function speakPart(partKey) {
+        const card = document.querySelector(`.card[data-part="${partKey}"]`);
+        if (card) speakText(card.querySelector('.fr').textContent);
+    }
+
+    function speakText(text) {
+        const clean = text.replace(/\(.*?\)/g, '').replace(/m\.|f\./g, '').replace(/\//g, '').trim();
+        const utter = new SpeechSynthesisUtterance(clean);
+        utter.lang = 'fr-FR';
+        utter.rate = 0.85;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utter);
+    }
+
+    function filterCards() {
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        const sections = document.querySelectorAll('[data-section]');
+        let anyVisible = false;
+
+        document.querySelectorAll('.card').forEach(card => {
+            const fr = card.querySelector('.fr').textContent.toLowerCase();
+            const cn = card.querySelector('.cn').textContent.toLowerCase();
+            const match = !q || fr.includes(q) || cn.includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) anyVisible = true;
+        });
+
+        sections.forEach(sec => {
+            const grid = sec.nextElementSibling;
+            if (!grid) return;
+            const visible = [...grid.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+            sec.style.display = visible ? '' : 'none';
+            grid.style.display = visible ? '' : 'none';
+        });
+
+        document.getElementById('noResult').style.display = anyVisible ? 'none' : 'block';
+    }
+</script>
+</body>
+</html>
