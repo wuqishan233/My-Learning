@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🃏 法语单词卡测验</title>
+    <script src="settings.js"></script>
+    <script src="vocab_freq.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { padding: 20px 16px 60px; }
+
+        /* ── Shared layout ─────────────────────────────────────────── */
+        .page { max-width: 900px; margin: 0 auto; }
+        #screen-setup { max-width: 900px; margin: 0 auto; }
+
+        /* ── Setup screen ──────────────────────────────────────────── */
+        #screen-setup header { text-align: center; margin-bottom: 28px; }
+        #screen-setup h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+        #screen-setup p { color: var(--muted); font-size: 0.92rem; }
+
+        .setup-section { margin-bottom: 22px; }
+        .setup-label {
+            font-size: 0.78rem; font-weight: 800; letter-spacing: 0.07em;
+            text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+        }
+        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip {
+            padding: 7px 16px; border-radius: 999px; border: 2px solid var(--border);
+            background: var(--card-bg); color: var(--text); font-size: 0.88rem;
+            font-weight: 600; cursor: pointer; transition: all 0.15s;
+        }
+        .chip:hover { border-color: var(--primary); color: var(--primary); }
+        .chip.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+        /* Compact group chips for freq word groups */
+        .group-chip {
+            padding: 4px 9px 5px; font-size: 0.78rem; font-weight: 600;
+            border-radius: 6px; border: 2px solid var(--border);
+            background: var(--card-bg); color: var(--muted); cursor: pointer;
+            transition: all 0.12s; text-align: center; line-height: 1.2;
+        }
+        .group-chip:hover { border-color: var(--primary); color: var(--primary); }
+        .group-chip.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .group-chip .gc-range { display: block; }
+        .group-chip .gc-stat  { display: block; font-size: 0.65rem; font-weight: 500; opacity: 0.85; margin-top: 1px; }
+        /* Score-based border colors (not applied when active) */
+        .group-chip.s-good   { border-color: #22a050; color: #22a050; }
+        .group-chip.s-ok     { border-color: #e6a817; color: #b07d00; }
+        .group-chip.s-bad    { border-color: #e04040; color: #c02020; }
+        [data-theme="dark"] .group-chip.s-ok { color: #f0c030; }
+        [data-theme="dark"] .group-chip.s-bad { color: #e07070; }
+        #freq-group-section { margin-top: 6px; }
+        #group-chip-wrap {
+            display: flex; flex-wrap: wrap; gap: 5px;
+            padding: 4px 2px;
+        }
+
+        .mode-toggle {
+            display: flex; background: var(--border); border-radius: 999px;
+            padding: 3px; width: fit-content;
+        }
+        .mode-btn {
+            padding: 8px 20px; border-radius: 999px; border: none; cursor: pointer;
+            font-size: 0.88rem; font-weight: 700; background: transparent;
+            color: var(--muted); transition: all 0.2s;
+        }
+        .mode-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(24,119,242,0.3); }
+
+        #start-btn {
+            width: 100%; padding: 15px; font-size: 1.05rem; font-weight: 800;
+            background: var(--primary); color: white; border: none;
+            border-radius: 14px; cursor: pointer; margin-top: 8px;
+            box-shadow: 0 4px 16px rgba(24,119,242,0.35);
+            transition: filter 0.15s, transform 0.15s;
+        }
+        #start-btn:hover { filter: brightness(0.9); transform: translateY(-1px); }
+        #card-count-info { text-align: center; color: var(--muted); font-size: 0.82rem; margin-bottom: 14px; }
+
+        /* ── Quiz screen ───────────────────────────────────────────── */
+        #screen-quiz header { margin-bottom: 18px; }
+        .quiz-progress-wrap {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+        }
+        .quiz-progress-bar {
+            flex: 1; height: 8px; background: var(--border);
+            border-radius: 999px; overflow: hidden;
+        }
+        .quiz-progress-fill {
+            height: 100%; background: var(--primary); border-radius: 999px;
+            transition: width 0.3s;
+        }
+        .quiz-progress-label { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+        .quiz-score-row {
+            display: flex; justify-content: center; gap: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-top: 4px;
+        }
+        .score-correct { color: #22a050; }
+        .score-wrong   { color: #e04040; }
+
+        /* Flip card */
+        .flip-wrap {
+            perspective: 900px; margin: 20px 0;
+            height: 230px; cursor: pointer; user-select: none;
+        }
+        .flip-inner {
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+            position: relative;
+        }
+        .flip-inner.flipped { transform: rotateY(180deg); }
+
+        .flip-face {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 24px; text-align: center;
+        }
+        .flip-face.back { transform: rotateY(180deg); }
+
+        .card-topic-badge {
+            font-size: 0.72rem; font-weight: 800; padding: 3px 11px;
+            border-radius: 999px; background: var(--primary-light);
+            color: var(--primary); margin-bottom: 12px;
+        }
+        .card-main {
+            font-size: 2rem; font-weight: 800;
+            color: var(--text-strong); line-height: 1.2; margin-bottom: 6px;
+        }
+        .card-sub {
+            font-size: 0.85rem; color: var(--muted); font-style: italic; margin-top: 4px;
+        }
+        .card-hint {
+            font-size: 0.78rem; color: var(--muted); margin-top: 14px;
+            display: flex; align-items: center; gap: 5px; opacity: 0.7;
+        }
+        .card-ipa { font-size: 0.95rem; color: var(--muted); margin-bottom: 4px; }
+        .card-cn-big { font-size: 1.8rem; font-weight: 800; color: var(--text-strong); margin-bottom: 2px; }
+        .card-en-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; font-style: italic; }
+        .card-fr-back { font-size: 1rem; color: var(--muted); font-weight: 600; }
+
+        .speak-fab {
+            position: absolute; top: 14px; right: 14px;
+            width: 34px; height: 34px; border-radius: 50%; border: none;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 15px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            transition: background 0.15s;
+        }
+        .speak-fab:hover { background: var(--primary); color: white; }
+
+        /* Answer buttons */
+        .answer-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s;
+        }
+        .answer-row.visible { opacity: 1; pointer-events: all; }
+
+        .ans-btn {
+            padding: 14px; border-radius: 14px; border: none; font-size: 1rem;
+            font-weight: 800; cursor: pointer; transition: filter 0.15s, transform 0.1s;
+        }
+        .ans-btn:active { transform: scale(0.96); }
+        .btn-correct { background: #d4edda; color: #155724; }
+        .btn-correct:hover { filter: brightness(0.93); }
+        .btn-wrong   { background: #f8d7da; color: #721c24; }
+        .btn-wrong:hover   { filter: brightness(0.93); }
+
+        @media (prefers-color-scheme: dark) {
+            .btn-correct { background: #1a3a26; color: #6eda8c; }
+            .btn-wrong   { background: #3a1a1e; color: #e07070; }
+            .mode-toggle { background: #3a3b3c; }
+        }
+
+        .skip-row { text-align: center; margin-top: 12px; }
+        .skip-link {
+            font-size: 0.82rem; color: var(--muted); cursor: pointer;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .skip-link:hover { color: var(--text); }
+
+        /* Keyboard hint bar */
+        .kbd-bar {
+            display: flex; justify-content: center; gap: 10px;
+            flex-wrap: wrap; margin-top: 18px;
+        }
+        .kbd-hint {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 0.75rem; color: var(--muted);
+        }
+        .kbd {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 28px; height: 24px; padding: 0 6px;
+            background: var(--card-bg); border: 1.5px solid var(--border);
+            border-radius: 5px; font-size: 0.72rem; font-weight: 700;
+            color: var(--text); box-shadow: 0 1px 0 var(--border);
+            transition: background 0.1s, color 0.1s;
+        }
+        .kbd.active {
+            background: var(--primary); color: white; border-color: var(--primary);
+        }
+
+        /* ── Result screen ─────────────────────────────────────────── */
+        #screen-result { text-align: center; padding-top: 24px; }
+        .result-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+        #screen-result h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        #screen-result p { color: var(--muted); font-size: 0.95rem; margin-bottom: 24px; }
+        .result-stat-row {
+            display: flex; justify-content: center; gap: 24px; margin-bottom: 28px;
+        }
+        .result-stat {
+            background: var(--card-bg); border-radius: 14px; padding: 16px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .result-stat-num { font-size: 2rem; font-weight: 900; display: block; line-height: 1; }
+        .result-stat-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; margin-top: 4px; display: block; }
+        .stat-c { color: #22a050; }
+        .stat-w { color: #e04040; }
+
+        .result-btn-row { display: flex; flex-direction: column; gap: 10px; }
+        .result-btn {
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer;
+            transition: filter 0.15s;
+        }
+        .result-btn:hover { filter: brightness(0.9); }
+        .result-btn-primary { background: var(--primary); color: white; }
+        .result-btn-secondary {
+            background: var(--card-bg); color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .result-btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+        .wrong-list-wrap { text-align: left; margin-bottom: 24px; }
+        .wrong-list-title {
+            font-size: 0.78rem; font-weight: 800; letter-spacing: 0.07em;
+            text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+        }
+        .wrong-list {
+            background: var(--card-bg); border-radius: 12px;
+            box-shadow: var(--shadow-sm); overflow: hidden;
+        }
+        .wrong-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 14px; border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+        .wrong-item:last-child { border-bottom: none; }
+        .wrong-item .wfr { font-weight: 700; color: var(--text-strong); }
+        .wrong-item .wcn { color: var(--muted); }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ══════════════ SETUP SCREEN ══════════════ -->
+    <div id="screen-setup">
+        <header>
+            <h1>🃏 单词卡测验</h1>
+            <p>选择范围与模式，开始主动回忆练习</p>
+        </header>
+
+        <div class="setup-section">
+            <div class="setup-label">📚 词汇范围</div>
+            <div class="chip-group" id="topic-chips">
+                <button class="chip active" data-topic="all">全部</button>
+                <button class="chip" data-topic="a1">A1 动词</button>
+                <button class="chip" data-topic="a2">A2 动词</button>
+                <button class="chip" data-topic="corps">身体部位</button>
+            </div>
+        </div>
+
+        <!-- Freq group selector — always visible -->
+        <div class="setup-section" id="freq-group-section">
+            <div class="setup-label">📊 分组（每组 50 词）</div>
+            <div id="group-chip-wrap">
+            </div>
+        </div>
+
+        <div class="setup-section">
+            <div class="setup-label">🔄 测验方向</div>
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="mode-fr">法 → 中</button>
+                <button class="mode-btn" id="mode-cn">中 → 法</button>
+            </div>
+        </div>
+
+        <p id="card-count-info">共 <strong id="deck-count">—</strong> 张卡片</p>
+        <button id="start-btn" onclick="startQuiz()">开始测验 →</button>
+    </div>
+
+    <!-- ══════════════ QUIZ SCREEN ══════════════ -->
+    <div id="screen-quiz" hidden>
+        <div class="back"><a href="index.html">← 返回目录</a></div>
+        <header>
+            <div class="quiz-progress-wrap">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="quiz-progress-label" id="progress-label">0 / 0</span>
+            </div>
+            <div class="quiz-score-row">
+                <span class="score-correct">✅ <span id="score-c">0</span></span>
+                <span class="score-wrong">❌ <span id="score-w">0</span></span>
+            </div>
+        </header>
+
+        <!-- Flip card -->
+        <div class="flip-wrap" id="flip-wrap" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-face front" id="card-front">
+                    <span class="card-topic-badge" id="front-badge"></span>
+                    <div class="card-main" id="front-main"></div>
+                    <div class="card-sub" id="front-sub"></div>
+                    <div class="card-hint">👆 点击翻转</div>
+                    <button class="speak-fab" id="front-speak" onclick="event.stopPropagation(); speakCurrent('front')">🔊</button>
+                </div>
+                <div class="flip-face back" id="card-back">
+                    <span class="card-topic-badge" id="back-badge"></span>
+                    <div class="card-cn-big" id="back-cn"></div>
+                    <div class="card-en-sub" id="back-en"></div>
+                    <div class="card-ipa" id="back-ipa"></div>
+                    <div class="card-fr-back" id="back-fr"></div>
+                    <button class="speak-fab" id="back-speak" onclick="event.stopPropagation(); speakCurrent('back')">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="answer-row" id="answer-row">
+            <button class="ans-btn btn-wrong"   onclick="answer(false)">❌ 不认识</button>
+            <button class="ans-btn btn-correct" onclick="answer(true)">✅ 认识</button>
+        </div>
+        <div class="skip-row">
+            <span class="skip-link" onclick="answer(null)">跳过</span>
+        </div>
+
+        <div class="kbd-bar">
+            <span class="kbd-hint"><kbd class="kbd" id="kbd-space">Space</kbd> 朗读</span>
+            <span class="kbd-hint"><kbd class="kbd" id="kbd-enter">Enter</kbd> 翻转</span>
+            <span class="kbd-hint"><kbd class="kbd" id="kbd-left">←</kbd> 不认识</span>
+            <span class="kbd-hint"><kbd class="kbd" id="kbd-right">→</kbd> 认识</span>
+        </div>
+    </div>
+
+    <!-- ══════════════ RESULT SCREEN ══════════════ -->
+    <div id="screen-result" hidden>
+        <span class="result-emoji" id="result-emoji">🎉</span>
+        <h2 id="result-title"></h2>
+        <p id="result-subtitle"></p>
+
+        <div class="result-stat-row">
+            <div class="result-stat">
+                <span class="result-stat-num stat-c" id="res-correct">0</span>
+                <span class="result-stat-label">认识</span>
+            </div>
+            <div class="result-stat">
+                <span class="result-stat-num stat-w" id="res-wrong">0</span>
+                <span class="result-stat-label">不认识</span>
+            </div>
+            <div class="result-stat">
+                <span class="result-stat-num" id="res-pct" style="color:var(--primary)">0%</span>
+                <span class="result-stat-label">正确率</span>
+            </div>
+        </div>
+
+        <div class="wrong-list-wrap" id="wrong-list-section" hidden>
+            <div class="wrong-list-title">❌ 需要复习的词汇</div>
+            <div class="wrong-list" id="wrong-list"></div>
+        </div>
+
+        <div class="result-btn-row">
+            <button class="result-btn result-btn-primary" id="retry-wrong-btn" onclick="retryWrong()" hidden>
+                🔁 只练错题
+            </button>
+            <button class="result-btn result-btn-secondary" onclick="retryAll()">↩ 重新全练</button>
+            <button class="result-btn result-btn-secondary" onclick="goSetup()">⚙️ 更换设置</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  VOCABULARY DATA
+// ══════════════════════════════════════════════
+const VOCAB = [
+    // ── A1 Verbs ──────────────────────────────
+    {fr:'être',         cn:'是',         ipa:'[ɛtʁ]',           topic:'a1'},
+    {fr:'avoir',        cn:'有',         ipa:'[a.vwaʁ]',        topic:'a1'},
+    {fr:'aller',        cn:'去',         ipa:'[a.le]',          topic:'a1'},
+    {fr:'venir',        cn:'来',         ipa:'[və.niʁ]',        topic:'a1'},
+    {fr:'faire',        cn:'做',         ipa:'[fɛʁ]',           topic:'a1'},
+    {fr:'dire',         cn:'说',         ipa:'[diʁ]',           topic:'a1'},
+    {fr:'pouvoir',      cn:'能／可以',   ipa:'[pu.vwaʁ]',       topic:'a1'},
+    {fr:'vouloir',      cn:'想要',       ipa:'[vu.lwaʁ]',       topic:'a1'},
+    {fr:'savoir',       cn:'知道',       ipa:'[sa.vwaʁ]',       topic:'a1'},
+    {fr:'devoir',       cn:'必须',       ipa:'[də.vwaʁ]',       topic:'a1'},
+    {fr:'parler',       cn:'说话',       ipa:'[paʁ.le]',        topic:'a1'},
+    {fr:'manger',       cn:'吃',         ipa:'[mɑ̃.ʒe]',        topic:'a1'},
+    {fr:'boire',        cn:'喝',         ipa:'[bwaʁ]',          topic:'a1'},
+    {fr:'écouter',      cn:'听',         ipa:'[e.ku.te]',       topic:'a1'},
+    {fr:'regarder',     cn:'看',         ipa:'[ʁə.ɡaʁ.de]',    topic:'a1'},
+    {fr:'aimer',        cn:'爱／喜欢',   ipa:'[ɛ.me]',          topic:'a1'},
+    {fr:'habiter',      cn:'居住',       ipa:'[a.bi.te]',       topic:'a1'},
+    {fr:'travailler',   cn:'工作',       ipa:'[tʁa.va.je]',     topic:'a1'},
+    {fr:'jouer',        cn:'玩／演奏',   ipa:'[ʒu.e]',          topic:'a1'},
+    {fr:'prendre',      cn:'拿／乘',     ipa:'[pʁɑ̃dʁ]',        topic:'a1'},
+    {fr:'donner',       cn:'给',         ipa:'[dɔ.ne]',         topic:'a1'},
+    {fr:'apprendre',    cn:'学习',       ipa:'[a.pʁɑ̃dʁ]',      topic:'a1'},
+    {fr:'comprendre',   cn:'理解',       ipa:'[kɔ̃.pʁɑ̃dʁ]',    topic:'a1'},
+    {fr:'acheter',      cn:'购买',       ipa:'[aʃ.te]',         topic:'a1'},
+    {fr:'vendre',       cn:'卖',         ipa:'[vɑ̃dʁ]',         topic:'a1'},
+    {fr:'dormir',       cn:'睡觉',       ipa:'[dɔʁ.miʁ]',      topic:'a1'},
+    {fr:'écrire',       cn:'写',         ipa:'[e.kʁiʁ]',        topic:'a1'},
+    {fr:'lire',         cn:'读',         ipa:'[liʁ]',           topic:'a1'},
+    {fr:'étudier',      cn:'学习',       ipa:'[e.ty.dje]',      topic:'a1'},
+    {fr:'chanter',      cn:'唱歌',       ipa:'[ʃɑ̃.te]',        topic:'a1'},
+    {fr:'danser',       cn:'跳舞',       ipa:'[dɑ̃.se]',        topic:'a1'},
+    {fr:'marcher',      cn:'走路',       ipa:'[maʁ.ʃe]',        topic:'a1'},
+    {fr:'courir',       cn:'跑步',       ipa:'[ku.ʁiʁ]',        topic:'a1'},
+    {fr:'attendre',     cn:'等待',       ipa:'[a.tɑ̃dʁ]',       topic:'a1'},
+    {fr:'arriver',      cn:'到达',       ipa:'[a.ʁi.ve]',       topic:'a1'},
+    {fr:'partir',       cn:'出发',       ipa:'[paʁ.tiʁ]',       topic:'a1'},
+    {fr:'entrer',       cn:'进入',       ipa:'[ɑ̃.tʁe]',        topic:'a1'},
+    {fr:'sortir',       cn:'出去',       ipa:'[sɔʁ.tiʁ]',       topic:'a1'},
+    {fr:'ouvrir',       cn:'打开',       ipa:'[u.vʁiʁ]',        topic:'a1'},
+    {fr:'fermer',       cn:'关闭',       ipa:'[fɛʁ.me]',        topic:'a1'},
+    {fr:'rester',       cn:'停留',       ipa:'[ʁɛs.te]',        topic:'a1'},
+    {fr:'trouver',      cn:'找到',       ipa:'[tʁu.ve]',        topic:'a1'},
+    {fr:'chercher',     cn:'寻找',       ipa:'[ʃɛʁ.ʃe]',        topic:'a1'},
+    {fr:'demander',     cn:'问／要求',   ipa:'[də.mɑ̃.de]',      topic:'a1'},
+    {fr:'répondre',     cn:'回答',       ipa:'[ʁe.pɔ̃dʁ]',      topic:'a1'},
+    {fr:'commencer',    cn:'开始',       ipa:'[kɔ.mɑ̃.se]',      topic:'a1'},
+    {fr:'finir',        cn:'结束',       ipa:'[fi.niʁ]',        topic:'a1'},
+    {fr:'tomber',       cn:'跌倒',       ipa:'[tɔ̃.be]',        topic:'a1'},
+    {fr:'nager',        cn:'游泳',       ipa:'[na.ʒe]',         topic:'a1'},
+    {fr:'monter',       cn:'上去',       ipa:'[mɔ̃.te]',        topic:'a1'},
+
+    // ── A2 Verbs ──────────────────────────────
+    {fr:'appeler',      cn:'呼叫／打电话', ipa:'[a.ple]',        topic:'a2'},
+    {fr:'penser',       cn:'思考／认为',  ipa:'[pɑ̃.se]',        topic:'a2'},
+    {fr:'entendre',     cn:'听到',        ipa:'[ɑ̃.tɑ̃dʁ]',      topic:'a2'},
+    {fr:'connaître',    cn:'认识／了解',  ipa:'[kɔ.nɛtʁ]',      topic:'a2'},
+    {fr:'choisir',      cn:'选择',        ipa:'[ʃwa.ziʁ]',      topic:'a2'},
+    {fr:'mettre',       cn:'放置／穿上',  ipa:'[mɛtʁ]',         topic:'a2'},
+    {fr:'passer',       cn:'经过／度过',  ipa:'[pa.se]',         topic:'a2'},
+    {fr:'croire',       cn:'相信／以为',  ipa:'[kʁwaʁ]',        topic:'a2'},
+    {fr:'devenir',      cn:'变成／成为',  ipa:'[də.və.niʁ]',    topic:'a2'},
+    {fr:'poser',        cn:'放下／提出',  ipa:'[po.ze]',         topic:'a2'},
+    {fr:'expliquer',    cn:'解释',        ipa:'[ɛks.pli.ke]',   topic:'a2'},
+    {fr:'offrir',       cn:'赠送／提供',  ipa:'[ɔ.fʁiʁ]',       topic:'a2'},
+    {fr:'se lever',     cn:'起床／站立',  ipa:'[sə lə.ve]',     topic:'a2'},
+    {fr:'se coucher',   cn:'上床睡觉',    ipa:'[sə ku.ʃe]',     topic:'a2'},
+    {fr:"s'habiller",   cn:'穿衣／打扮',  ipa:'[sa.bi.je]',     topic:'a2'},
+    {fr:'se laver',     cn:'洗澡／洗脸',  ipa:'[sə la.ve]',     topic:'a2'},
+    {fr:'se reposer',   cn:'休息',        ipa:'[sə ʁə.po.ze]',  topic:'a2'},
+    {fr:'se promener',  cn:'散步',        ipa:'[sə pʁɔm.ne]',   topic:'a2'},
+    {fr:'gagner',       cn:'赢／赚',      ipa:'[ɡa.ɲe]',        topic:'a2'},
+    {fr:'perdre',       cn:'输／丢失',    ipa:'[pɛʁdʁ]',        topic:'a2'},
+    {fr:'descendre',    cn:'下去／降',    ipa:'[de.sɑ̃dʁ]',      topic:'a2'},
+    {fr:'montrer',      cn:'展示',        ipa:'[mɔ̃.tʁe]',       topic:'a2'},
+    {fr:'recevoir',     cn:'收到／接待',  ipa:'[ʁə.sə.vwaʁ]',  topic:'a2'},
+    {fr:'envoyer',      cn:'发送／寄',    ipa:'[ɑ̃.vwa.je]',    topic:'a2'},
+    {fr:'imaginer',     cn:'想象',        ipa:'[i.ma.ʒi.ne]',   topic:'a2'},
+    {fr:'tourner',      cn:'转动／拐弯',  ipa:'[tuʁ.ne]',       topic:'a2'},
+    {fr:'rencontrer',   cn:'遇到',        ipa:'[ʁɑ̃.kɔ̃.tʁe]',  topic:'a2'},
+    {fr:'suivre',       cn:'跟随／遵守',  ipa:'[sɥivʁ]',        topic:'a2'},
+    {fr:'revenir',      cn:'回来',        ipa:'[ʁə.və.niʁ]',   topic:'a2'},
+    {fr:'mourir',       cn:'死亡',        ipa:'[mu.ʁiʁ]',       topic:'a2'},
+    {fr:'naître',       cn:'出生',        ipa:'[nɛtʁ]',         topic:'a2'},
+    {fr:'découvrir',    cn:'发现',        ipa:'[de.ku.vʁiʁ]',  topic:'a2'},
+    {fr:'sentir',       cn:'感觉／闻到',  ipa:'[sɑ̃.tiʁ]',      topic:'a2'},
+    {fr:'voyager',      cn:'旅行',        ipa:'[vwa.ja.ʒe]',    topic:'a2'},
+    {fr:'apporter',     cn:'带物来',      ipa:'[a.pɔʁ.te]',     topic:'a2'},
+    {fr:'emporter',     cn:'带物走',      ipa:'[ɑ̃.pɔʁ.te]',    topic:'a2'},
+    {fr:'amener',       cn:'带人来',      ipa:'[am.ne]',        topic:'a2'},
+    {fr:'emmener',      cn:'带人走',      ipa:'[ɑ̃m.ne]',       topic:'a2'},
+    {fr:'rapporter',    cn:'带回／归还',  ipa:'[ʁa.pɔʁ.te]',   topic:'a2'},
+    {fr:'pleurer',      cn:'哭',          ipa:'[plœ.ʁe]',       topic:'a2'},
+    {fr:'sourire',      cn:'微笑',        ipa:'[su.ʁiʁ]',       topic:'a2'},
+    {fr:'remplir',      cn:'填满／填写',  ipa:'[ʁɑ̃.pliʁ]',     topic:'a2'},
+    {fr:'cacher',       cn:'隐藏',        ipa:'[ka.ʃe]',        topic:'a2'},
+    {fr:'proposer',     cn:'提议／建议',  ipa:'[pʁo.po.ze]',    topic:'a2'},
+    {fr:'ajouter',      cn:'添加',        ipa:'[a.ʒu.te]',      topic:'a2'},
+    {fr:'couper',       cn:'切／剪',      ipa:'[ku.pe]',        topic:'a2'},
+    {fr:'éviter',       cn:'避免',        ipa:'[e.vi.te]',      topic:'a2'},
+    {fr:'créer',        cn:'创造',        ipa:'[kʁe.e]',        topic:'a2'},
+    {fr:'partager',     cn:'分享',        ipa:'[paʁ.ta.ʒe]',   topic:'a2'},
+
+    // ── Body Parts ────────────────────────────
+    {fr:'la tête',      cn:'头',          ipa:'[la tɛt]',       topic:'corps'},
+    {fr:'le visage',    cn:'脸',          ipa:'[lə vi.zaʒ]',    topic:'corps'},
+    {fr:'les cheveux',  cn:'头发',        ipa:'[le ʃə.vø]',     topic:'corps'},
+    {fr:'le front',     cn:'额头',        ipa:'[lə fʁɔ̃]',      topic:'corps'},
+    {fr:'un œil / les yeux', cn:'眼睛',  ipa:'[œ̃ œj / le zjø]', topic:'corps'},
+    {fr:'les oreilles', cn:'耳朵',        ipa:'[le zɔ.ʁɛj]',   topic:'corps'},
+    {fr:'le nez',       cn:'鼻子',        ipa:'[lə ne]',        topic:'corps'},
+    {fr:'la bouche',    cn:'嘴巴',        ipa:'[la buʃ]',       topic:'corps'},
+    {fr:'les lèvres',   cn:'嘴唇',        ipa:'[le lɛvʁ]',      topic:'corps'},
+    {fr:'la langue',    cn:'舌头',        ipa:'[la lɑ̃ɡ]',      topic:'corps'},
+    {fr:'les dents',    cn:'牙齿',        ipa:'[le dɑ̃]',        topic:'corps'},
+    {fr:'le menton',    cn:'下巴',        ipa:'[lə mɑ̃.tɔ̃]',   topic:'corps'},
+    {fr:'le cou',       cn:'脖子',        ipa:'[lə ku]',        topic:'corps'},
+    {fr:"l'épaule",     cn:'肩膀',        ipa:'[le.pol]',       topic:'corps'},
+    {fr:'la poitrine',  cn:'胸部',        ipa:'[la pwa.tʁin]',  topic:'corps'},
+    {fr:'le dos',       cn:'背部',        ipa:'[lə do]',        topic:'corps'},
+    {fr:'le bras',      cn:'手臂',        ipa:'[lə bʁa]',       topic:'corps'},
+    {fr:'la main',      cn:'手',          ipa:'[la mɛ̃]',       topic:'corps'},
+    {fr:'les doigts',   cn:'手指',        ipa:'[le dwa]',       topic:'corps'},
+    {fr:'le ventre',    cn:'腹部',        ipa:'[lə vɑ̃tʁ]',     topic:'corps'},
+    {fr:'la cuisse',    cn:'大腿',        ipa:'[la kɥis]',      topic:'corps'},
+    {fr:'la jambe',     cn:'小腿',        ipa:'[la ʒɑ̃b]',      topic:'corps'},
+    {fr:'la cheville',  cn:'脚踝',        ipa:'[la ʃə.vij]',    topic:'corps'},
+    {fr:'le pied',      cn:'脚',          ipa:'[lə pje]',       topic:'corps'},
+];
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let deck = [];
+let idx = 0;
+let correct = 0;
+let wrong = 0;
+let wrongCards = [];
+let flipped = false;
+let currentMode = 'fr'; // 'fr' = French→Chinese, 'cn' = Chinese→French
+
+const TOPIC_LABELS = { a1:'A1 动词', a2:'A2 动词', corps:'身体部位', freq:'高频词汇', all:'全部' };
+
+// Merge built-in vocab with externally loaded freq list
+const ALL_VOCAB = [...VOCAB, ...(typeof VOCAB_FREQ !== 'undefined' ? VOCAB_FREQ : [])];
+
+// Assign group numbers to freq words (50 per group)
+let _fi = 0;
+ALL_VOCAB.forEach(v => { if (v.topic === 'freq') { v.freqGroup = Math.floor(_fi / 50) + 1; _fi++; } });
+const FREQ_GROUP_COUNT = Math.ceil(_fi / 50);
+
+// ── Group stats (localStorage) ─────────────────
+const GS_KEY = 'fr_group_stats';
+function loadGroupStats() {
+    try { return JSON.parse(localStorage.getItem(GS_KEY)) || {}; } catch { return {}; }
+}
+function saveGroupStat(g, correct, total) {
+    const stats = loadGroupStats();
+    const prev  = stats[g] || { checks: 0 };
+    stats[g] = {
+        checks:      (prev.checks || 0) + 1,
+        lastDate:    new Date().toLocaleDateString('zh-CN', { month:'2-digit', day:'2-digit' }).replace('/', '-'),
+        lastScore:   total ? Math.round(correct / total * 100) : 0,
+        lastCorrect: correct,
+        lastTotal:   total
+    };
+    localStorage.setItem(GS_KEY, JSON.stringify(stats));
+    return stats[g];
+}
+function applyChipStat(btn, stat) {
+    if (!stat) return;
+    const scoreEl = btn.querySelector('.gc-stat');
+    if (!scoreEl) return;
+    scoreEl.textContent = `✓${stat.checks} · ${stat.lastScore}% · ${stat.lastDate}`;
+    btn.classList.remove('s-good','s-ok','s-bad');
+    if (!btn.classList.contains('active')) {
+        if (stat.lastScore >= 80) btn.classList.add('s-good');
+        else if (stat.lastScore >= 50) btn.classList.add('s-ok');
+        else btn.classList.add('s-bad');
+    }
+}
+function refreshAllGroupChips() {
+    const stats = loadGroupStats();
+    groupWrap.querySelectorAll('.group-chip[data-group]').forEach(btn => {
+        const g = btn.dataset.group;
+        if (g !== '0') applyChipStat(btn, stats[g]);
+    });
+}
+
+// Build group chips
+let currentFreqGroup = 0; // 0 = all
+const groupWrap = document.getElementById('group-chip-wrap');
+const stats0 = loadGroupStats();
+for (let g = 1; g <= FREQ_GROUP_COUNT; g++) {
+    const btn = document.createElement('button');
+    btn.className = 'group-chip';
+    btn.dataset.group = g;
+    const start = (g - 1) * 50 + 1;
+    const end   = Math.min(g * 50, _fi);
+    btn.innerHTML = `<span class="gc-range">${start}–${end}</span><span class="gc-stat">—</span>`;
+    applyChipStat(btn, stats0[g]);
+    groupWrap.appendChild(btn);
+}
+groupWrap.querySelectorAll('.group-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentFreqGroup = parseInt(btn.dataset.group);
+        groupWrap.querySelectorAll('.group-chip').forEach(b => {
+            b.classList.remove('active', 's-good', 's-ok', 's-bad');
+            applyChipStat(b, loadGroupStats()[b.dataset.group]);
+        });
+        btn.classList.add('active');
+        btn.classList.remove('s-good','s-ok','s-bad');
+        updateDeckCount();
+    });
+});
+
+// ── Topic chip selection (multi-select) ───────
+const topicState = new Set(['all']);
+
+document.querySelectorAll('[data-topic]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const t = btn.dataset.topic;
+        if (t === 'all') {
+            topicState.clear();
+            topicState.add('all');
+        } else {
+            topicState.delete('all');
+            if (topicState.has(t)) topicState.delete(t);
+            else topicState.add(t);
+            if (topicState.size === 0) topicState.add('all');
+        }
+        document.querySelectorAll('[data-topic]').forEach(b => {
+            b.classList.toggle('active', topicState.has(b.dataset.topic));
+        });
+        updateDeckCount();
+    });
+});
+
+// ── Mode toggle ────────────────────────────────
+document.getElementById('mode-fr').addEventListener('click', () => {
+    currentMode = 'fr';
+    document.getElementById('mode-fr').classList.add('active');
+    document.getElementById('mode-cn').classList.remove('active');
+});
+document.getElementById('mode-cn').addEventListener('click', () => {
+    currentMode = 'cn';
+    document.getElementById('mode-cn').classList.add('active');
+    document.getElementById('mode-fr').classList.remove('active');
+});
+
+function getFilteredDeck() {
+    if (currentFreqGroup > 0) return ALL_VOCAB.filter(v => v.freqGroup === currentFreqGroup);
+    if (topicState.has('all')) return [...ALL_VOCAB];
+    return ALL_VOCAB.filter(v => topicState.has(v.topic));
+}
+
+function updateDeckCount() {
+    document.getElementById('deck-count').textContent = getFilteredDeck().length;
+}
+updateDeckCount();
+
+// ══════════════════════════════════════════════
+//  QUIZ FLOW
+// ══════════════════════════════════════════════
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function startQuiz(customDeck) {
+    deck = shuffle(customDeck || getFilteredDeck());
+    idx = 0; correct = 0; wrong = 0; wrongCards = [];
+    show('screen-quiz');
+    showCard();
+}
+
+function showCard() {
+    if (idx >= deck.length) { showResult(); return; }
+    const card = deck[idx];
+    flipped = false;
+
+    // Snap back instantly (no animation) so the back face never flashes
+    const inner = document.getElementById('flip-inner');
+    inner.style.transition = 'none';
+    inner.classList.remove('flipped');
+    inner.offsetHeight; // force reflow before re-enabling transition
+    inner.style.transition = '';
+
+    document.getElementById('answer-row').classList.remove('visible');
+
+    const topicLabel = TOPIC_LABELS[card.topic] || card.topic;
+
+    if (currentMode === 'fr') {
+        // Front: French. Back: Chinese (+ English sub)
+        document.getElementById('front-badge').textContent = topicLabel;
+        document.getElementById('front-main').textContent  = card.fr;
+        document.getElementById('front-sub').textContent   = '';
+        document.getElementById('back-badge').textContent  = topicLabel;
+        document.getElementById('back-cn').textContent     = card.cn;
+        document.getElementById('back-en').textContent     = card.en || '';
+        document.getElementById('back-ipa').textContent    = card.ipa || '';
+        document.getElementById('back-fr').textContent     = card.fr;
+    } else {
+        // Front: Chinese. Back: French (+ English sub)
+        document.getElementById('front-badge').textContent = topicLabel;
+        document.getElementById('front-main').textContent  = card.cn;
+        document.getElementById('front-sub').textContent   = card.en || '';
+        document.getElementById('back-badge').textContent  = topicLabel;
+        document.getElementById('back-cn').textContent     = card.fr;
+        document.getElementById('back-en').textContent     = '';
+        document.getElementById('back-ipa').textContent    = card.ipa || '';
+        document.getElementById('back-fr').textContent     = card.cn;
+    }
+
+    updateProgress();
+}
+
+function flipCard() {
+    if (flipped) return;
+    flipped = true;
+    document.getElementById('flip-inner').classList.add('flipped');
+    document.getElementById('answer-row').classList.add('visible');
+    // Auto-speak the French side on flip
+    if (currentMode === 'fr') {
+        speakCurrent('back');
+    }
+}
+
+function answer(known) {
+    if (!flipped) { flipCard(); return; }
+    const card = deck[idx];
+    if (known === true)  { correct++; document.getElementById('score-c').textContent = correct; }
+    if (known === false) { wrong++;   document.getElementById('score-w').textContent = wrong; wrongCards.push(card); }
+    idx++;
+    showCard();
+}
+
+function updateProgress() {
+    const total = deck.length;
+    const done  = idx;
+    const pct   = total ? (done / total * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = `${done} / ${total}`;
+}
+
+function speakCurrent(side) {
+    const card = deck[idx];
+    if (!card) return;
+    // Always speak the French word
+    frSettings.speak(card.fr);
+}
+
+// ══════════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════════
+function showResult() {
+    const total = correct + wrong;
+    const pct   = total ? Math.round(correct / total * 100) : 0;
+
+    document.getElementById('res-correct').textContent = correct;
+    document.getElementById('res-wrong').textContent   = wrong;
+    document.getElementById('res-pct').textContent     = pct + '%';
+
+    let emoji = '🎉', title = '太棒了！', sub = `你认识了全部 ${correct} 个词汇。`;
+    if (pct < 50)      { emoji = '💪'; title = '继续加油！'; sub = `还有 ${wrong} 个词需要多练练。`; }
+    else if (pct < 80) { emoji = '🙂'; title = '不错！';    sub = `继续复习错误的词汇，很快就能全掌握。`; }
+    else if (pct < 100){ emoji = '😊'; title = '很好！';    sub = `再坚持一下，快要全部掌握了！`; }
+
+    document.getElementById('result-emoji').textContent    = emoji;
+    document.getElementById('result-title').textContent    = title;
+    document.getElementById('result-subtitle').textContent = sub;
+
+    // Wrong words list
+    const listEl  = document.getElementById('wrong-list');
+    const section = document.getElementById('wrong-list-section');
+    const retryBtn= document.getElementById('retry-wrong-btn');
+    listEl.innerHTML = '';
+    if (wrongCards.length > 0) {
+        section.hidden = false;
+        retryBtn.hidden = false;
+        wrongCards.forEach(c => {
+            const d = document.createElement('div');
+            d.className = 'wrong-item';
+            d.innerHTML = `<span class="wfr">${c.fr}</span><span class="wcn">${c.cn}</span>`;
+            listEl.appendChild(d);
+        });
+    } else {
+        section.hidden = true;
+        retryBtn.hidden = true;
+    }
+
+    show('screen-result');
+
+    // Save group stats if this was a single freq group quiz
+    if (currentFreqGroup > 0) {
+        const stat = saveGroupStat(currentFreqGroup, correct, correct + wrong);
+        const chip = groupWrap.querySelector(`[data-group="${currentFreqGroup}"]`);
+        if (chip) applyChipStat(chip, stat);
+    }
+}
+
+function retryWrong() { if (wrongCards.length) startQuiz([...wrongCards]); }
+function retryAll()   { startQuiz(); }
+function goSetup()    { show('screen-setup'); updateDeckCount(); refreshAllGroupChips(); }
+
+// ══════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    // Only active on the quiz screen
+    if (document.getElementById('screen-quiz').hidden) return;
+    // Ignore when focus is inside an input/button (setup screen chips etc.)
+    if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+    switch (e.code) {
+        case 'Space':
+            e.preventDefault();
+            speakCurrent('front');
+            flashHint('space');
+            break;
+        case 'Enter':
+            e.preventDefault();
+            if (!flipped) {
+                flipCard();
+            }
+            flashHint('enter');
+            break;
+        case 'ArrowLeft':
+            e.preventDefault();
+            if (flipped) { answer(false); flashHint('left'); }
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            if (flipped) { answer(true); flashHint('right'); }
+            break;
+    }
+});
+
+function flashHint(key) {
+    const map = { space: 'kbd-space', enter: 'kbd-enter', left: 'kbd-left', right: 'kbd-right' };
+    const el = document.getElementById(map[key]);
+    if (!el) return;
+    el.classList.add('active');
+    setTimeout(() => el.classList.remove('active'), 200);
+}
+
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
+function show(id) {
+    ['screen-setup','screen-quiz','screen-result'].forEach(s => {
+        document.getElementById(s).hidden = (s !== id);
+    });
+}
+</script>
+</body>
+</html>

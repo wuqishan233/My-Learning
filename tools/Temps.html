@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语时间词汇 — 星期・月份・季节</title>
+    <script src="settings.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+        h1   { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--primary);
+            border-bottom: 2px solid var(--border); padding-bottom: 6px;
+            margin: 28px 0 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+
+        /* 7-column grid for days so Mon–Sun sits in a row */
+        .grid-7 {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 700px) {
+            .grid-7 { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 420px) {
+            .grid-7 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* 4-column grid for seasons */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 560px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* 3-column grid for months */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 500px) {
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            text-align: center;
+            position: relative;
+        }
+        .card:hover { box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .card.playing { background: var(--primary-light); border-color: var(--primary); }
+
+        .card-icon { font-size: 1.6rem; margin-bottom: 6px; display: block; }
+        .card-fr   { font-size: 1rem; font-weight: 700; color: var(--text-strong); display: block; margin-bottom: 3px; }
+        .card-ipa  { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 3px; font-family: monospace; }
+        .card-cn   { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 6px; }
+        .card-note { font-size: 0.7rem; color: var(--primary); font-style: italic; }
+
+        /* Season cards — slightly taller with colour accent */
+        .season-card { border-top: 4px solid var(--season-color, var(--primary)); }
+
+        .play-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%; border: none;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .play-btn:hover { background: var(--primary); color: white; }
+
+        /* Read-all strip */
+        .read-bar {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 8px; justify-content: flex-end;
+        }
+        .read-btn {
+            background: var(--primary); color: white;
+            border: none; border-radius: 999px;
+            padding: 6px 16px; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: filter 0.15s;
+        }
+        .read-btn:hover { filter: brightness(0.88); }
+        .read-btn.stop { background: #e04040; }
+
+        /* Grammar note box */
+        .note-box {
+            background: var(--primary-light); border-radius: 12px;
+            padding: 14px 18px; margin: 20px 0 0;
+            font-size: 0.88rem; line-height: 1.7; color: var(--text);
+        }
+        .note-box strong { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="back"><a href="index.html">← 返回总目录</a></div>
+    <h1>📅 时间词汇</h1>
+    <p class="subtitle">Le Temps — 星期 · 月份 · 季节 · 点击即可朗读</p>
+
+    <!-- ══════════════ 星期 ══════════════ -->
+    <div class="section-title">📆 星期 Les Jours de la Semaine</div>
+    <div class="read-bar">
+        <button class="read-btn" id="btn-jours" onclick="readAll('jours')">▶ 顺序朗读</button>
+    </div>
+    <div class="grid-7" id="group-jours">
+        <div class="card" onclick="speak(this)" data-fr="lundi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌙</span>
+            <span class="card-fr">lundi</span>
+            <span class="card-ipa">[lœ̃.di]</span>
+            <span class="card-cn">星期一</span>
+            <span class="card-note">Moon day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="mardi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🔴</span>
+            <span class="card-fr">mardi</span>
+            <span class="card-ipa">[maʁ.di]</span>
+            <span class="card-cn">星期二</span>
+            <span class="card-note">Mars day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="mercredi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">☿</span>
+            <span class="card-fr">mercredi</span>
+            <span class="card-ipa">[mɛʁ.kʁə.di]</span>
+            <span class="card-cn">星期三</span>
+            <span class="card-note">Mercury day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="jeudi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">⚡</span>
+            <span class="card-fr">jeudi</span>
+            <span class="card-ipa">[ʒø.di]</span>
+            <span class="card-cn">星期四</span>
+            <span class="card-note">Jupiter day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="vendredi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💘</span>
+            <span class="card-fr">vendredi</span>
+            <span class="card-ipa">[vɑ̃.dʁə.di]</span>
+            <span class="card-cn">星期五</span>
+            <span class="card-note">Venus day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="samedi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🪐</span>
+            <span class="card-fr">samedi</span>
+            <span class="card-ipa">[sam.di]</span>
+            <span class="card-cn">星期六</span>
+            <span class="card-note">Saturn day</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="dimanche">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">☀️</span>
+            <span class="card-fr">dimanche</span>
+            <span class="card-ipa">[di.mɑ̃ʃ]</span>
+            <span class="card-cn">星期天</span>
+            <span class="card-note">Lord's day</span>
+        </div>
+    </div>
+
+    <div class="note-box">
+        💡 <strong>用法：</strong>法语星期不大写。<br>
+        <strong>le lundi</strong> = 每周一（every Monday）&nbsp;&nbsp;
+        <strong>lundi</strong> = 这个星期一（this Monday）<br>
+        <em>Je travaille le lundi.</em> — 我每周一工作。&nbsp;&nbsp;
+        <em>On se voit lundi ?</em> — 我们这周一见？
+    </div>
+
+    <!-- ══════════════ 月份 ══════════════ -->
+    <div class="section-title">🗓 月份 Les Mois de l'Année</div>
+    <div class="read-bar">
+        <button class="read-btn" id="btn-mois" onclick="readAll('mois')">▶ 顺序朗读</button>
+    </div>
+    <div class="grid-3" id="group-mois">
+        <div class="card" onclick="speak(this)" data-fr="janvier">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">❄️</span>
+            <span class="card-fr">janvier</span>
+            <span class="card-ipa">[ʒɑ̃.vje]</span>
+            <span class="card-cn">一月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="février">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💝</span>
+            <span class="card-fr">février</span>
+            <span class="card-ipa">[fe.vʁije]</span>
+            <span class="card-cn">二月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="mars">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌱</span>
+            <span class="card-fr">mars</span>
+            <span class="card-ipa">[maʁs]</span>
+            <span class="card-cn">三月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="avril">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌸</span>
+            <span class="card-fr">avril</span>
+            <span class="card-ipa">[a.vʁil]</span>
+            <span class="card-cn">四月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="mai">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌺</span>
+            <span class="card-fr">mai</span>
+            <span class="card-ipa">[mɛ]</span>
+            <span class="card-cn">五月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="juin">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">☀️</span>
+            <span class="card-fr">juin</span>
+            <span class="card-ipa">[ʒɥɛ̃]</span>
+            <span class="card-cn">六月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="juillet">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🏖️</span>
+            <span class="card-fr">juillet</span>
+            <span class="card-ipa">[ʒɥi.jɛ]</span>
+            <span class="card-cn">七月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="août">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌻</span>
+            <span class="card-fr">août</span>
+            <span class="card-ipa">[u(t)]</span>
+            <span class="card-cn">八月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="septembre">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🍂</span>
+            <span class="card-fr">septembre</span>
+            <span class="card-ipa">[sɛp.tɑ̃bʁ]</span>
+            <span class="card-cn">九月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="octobre">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🎃</span>
+            <span class="card-fr">octobre</span>
+            <span class="card-ipa">[ɔk.tɔbʁ]</span>
+            <span class="card-cn">十月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="novembre">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🍁</span>
+            <span class="card-fr">novembre</span>
+            <span class="card-ipa">[nɔ.vɑ̃bʁ]</span>
+            <span class="card-cn">十一月</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="décembre">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🎄</span>
+            <span class="card-fr">décembre</span>
+            <span class="card-ipa">[de.sɑ̃bʁ]</span>
+            <span class="card-cn">十二月</span>
+        </div>
+    </div>
+
+    <div class="note-box">
+        💡 <strong>用法：</strong>月份不大写。介词用 <strong>en</strong>（+ 月份）。<br>
+        <em>Je suis né en mars.</em> — 我三月份出生。&nbsp;&nbsp;
+        <em>On part en juillet.</em> — 我们七月出发。<br>
+        <strong>au mois de + 月份</strong> 也可以：<em>au mois d'avril</em> — 在四月。
+    </div>
+
+    <!-- ══════════════ 季节 ══════════════ -->
+    <div class="section-title">🌿 季节 Les Saisons</div>
+    <div class="read-bar">
+        <button class="read-btn" id="btn-saisons" onclick="readAll('saisons')">▶ 顺序朗读</button>
+    </div>
+    <div class="grid-4" id="group-saisons">
+        <div class="card season-card" onclick="speak(this)" data-fr="le printemps" style="--season-color:#4caf50">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🌸</span>
+            <span class="card-fr">le printemps</span>
+            <span class="card-ipa">[pʁɛ̃.tɑ̃]</span>
+            <span class="card-cn">春天</span>
+        </div>
+        <div class="card season-card" onclick="speak(this)" data-fr="l'été" style="--season-color:#ff9800">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">☀️</span>
+            <span class="card-fr">l'été</span>
+            <span class="card-ipa">[e.te]</span>
+            <span class="card-cn">夏天</span>
+        </div>
+        <div class="card season-card" onclick="speak(this)" data-fr="l'automne" style="--season-color:#f44336">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🍂</span>
+            <span class="card-fr">l'automne</span>
+            <span class="card-ipa">[o.tɔn]</span>
+            <span class="card-cn">秋天</span>
+        </div>
+        <div class="card season-card" onclick="speak(this)" data-fr="l'hiver" style="--season-color:#2196f3">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">❄️</span>
+            <span class="card-fr">l'hiver</span>
+            <span class="card-ipa">[i.vɛʁ]</span>
+            <span class="card-cn">冬天</span>
+        </div>
+    </div>
+
+    <div class="note-box">
+        💡 <strong>季节介词：</strong>
+        <strong>au printemps</strong>（春天）&nbsp;
+        <strong>en été</strong>（夏天）&nbsp;
+        <strong>en automne</strong>（秋天）&nbsp;
+        <strong>en hiver</strong>（冬天）<br>
+        <em>Il fait chaud en été.</em> — 夏天很热。&nbsp;&nbsp;
+        <em>J'adore l'automne.</em> — 我喜爱秋天。
+    </div>
+
+    <!-- ══════════════ 时间表达 ══════════════ -->
+    <div class="section-title">⏰ 常用时间词 Expressions de Temps</div>
+    <div class="grid" id="group-temps">
+        <div class="card" onclick="speak(this)" data-fr="aujourd'hui">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">aujourd'hui</span>
+            <span class="card-ipa">[o.ʒuʁ.dɥi]</span>
+            <span class="card-cn">今天</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="demain">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">demain</span>
+            <span class="card-ipa">[də.mɛ̃]</span>
+            <span class="card-cn">明天</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="hier">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">hier</span>
+            <span class="card-ipa">[jɛʁ]</span>
+            <span class="card-cn">昨天</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="cette semaine">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">cette semaine</span>
+            <span class="card-ipa">[sɛt sə.mɛn]</span>
+            <span class="card-cn">这周</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="la semaine prochaine">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">la semaine prochaine</span>
+            <span class="card-ipa">[pʁɔ.ʃɛn]</span>
+            <span class="card-cn">下周</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="la semaine dernière">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">la semaine dernière</span>
+            <span class="card-ipa">[dɛʁ.njɛʁ]</span>
+            <span class="card-cn">上周</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="le matin">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">le matin</span>
+            <span class="card-ipa">[ma.tɛ̃]</span>
+            <span class="card-cn">早上</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="l'après-midi">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">l'après-midi</span>
+            <span class="card-ipa">[a.pʁɛ mi.di]</span>
+            <span class="card-cn">下午</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="le soir">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">le soir</span>
+            <span class="card-ipa">[swaʁ]</span>
+            <span class="card-cn">傍晚／晚上</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="la nuit">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">la nuit</span>
+            <span class="card-ipa">[nɥi]</span>
+            <span class="card-cn">夜晚</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="maintenant">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">maintenant</span>
+            <span class="card-ipa">[mɛ̃t.nɑ̃]</span>
+            <span class="card-cn">现在</span>
+        </div>
+        <div class="card" onclick="speak(this)" data-fr="bientôt">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-fr">bientôt</span>
+            <span class="card-ipa">[bjɛ̃.to]</span>
+            <span class="card-cn">很快／马上</span>
+        </div>
+    </div>
+
+<script>
+// ── Speak single card ────────────────────────────────────────
+function speak(card) {
+    document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+    card.classList.add('playing');
+    const text = card.dataset.fr;
+    frSettings.speak(text, () => card.classList.remove('playing'));
+}
+
+// ── Read-all per group ───────────────────────────────────────
+const readState = {};   // groupId → { idx, cards, playing }
+
+function readAll(groupId) {
+    const btn = document.getElementById('btn-' + groupId);
+
+    // If already playing this group, stop
+    if (readState[groupId]?.playing) {
+        window.speechSynthesis.cancel();
+        readState[groupId].playing = false;
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        btn.textContent = '▶ 顺序朗读';
+        btn.classList.remove('stop');
+        return;
+    }
+
+    const group = document.getElementById('group-' + groupId);
+    const cards = [...group.querySelectorAll('.card')];
+    readState[groupId] = { idx: 0, cards, playing: true };
+    btn.textContent = '⏹ 停止';
+    btn.classList.add('stop');
+    speakNext(groupId);
+}
+
+function speakNext(groupId) {
+    const state = readState[groupId];
+    if (!state?.playing) return;
+    if (state.idx >= state.cards.length) {
+        // Done
+        state.playing = false;
+        const btn = document.getElementById('btn-' + groupId);
+        btn.textContent = '▶ 顺序朗读';
+        btn.classList.remove('stop');
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        return;
+    }
+
+    const card = state.cards[state.idx++];
+    document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+    card.classList.add('playing');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    frSettings.speak(card.dataset.fr, () => {
+        setTimeout(() => speakNext(groupId), 400);
+    });
+}
+</script>
+</body>
+</html>

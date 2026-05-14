@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语动词变位 — Conjugaison</title>
+    <script src="settings.js"></script>
+    <script src="conjugation_data.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        .top-bar {
+            display: flex; align-items: center; gap: 16px;
+            padding: 12px 20px; border-bottom: 1px solid var(--border);
+            background: var(--card-bg); flex-shrink: 0;
+        }
+        .top-bar a { color: var(--muted); font-size: 0.85rem; text-decoration: none; white-space: nowrap; }
+        .top-bar a:hover { color: var(--primary); }
+        .top-bar h1 { font-size: 1.1rem; font-weight: 800; margin: 0; }
+        .top-bar .search-wrap { flex: 1; max-width: 280px; position: relative; }
+        .top-bar input {
+            width: 100%; padding: 7px 12px 7px 32px; border-radius: 8px;
+            border: 1.5px solid var(--border); background: var(--bg);
+            color: var(--text); font-size: 0.88rem; box-sizing: border-box;
+        }
+        .top-bar input:focus { outline: none; border-color: var(--primary); }
+        .top-bar .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.8rem; }
+
+        /* Main layout */
+        .main { display: flex; flex: 1; overflow: hidden; }
+
+        /* Verb list sidebar */
+        .verb-list {
+            width: 160px; flex-shrink: 0;
+            overflow-y: auto; border-right: 1px solid var(--border);
+            padding: 8px 6px;
+        }
+        .verb-btn {
+            display: block; width: 100%; text-align: left;
+            padding: 8px 10px; border-radius: 8px; border: none;
+            background: none; color: var(--text); font-size: 0.88rem;
+            font-weight: 600; cursor: pointer; transition: background 0.12s;
+            text-transform: lowercase; letter-spacing: 0.02em;
+        }
+        .verb-btn::first-letter { text-transform: uppercase; }
+        .verb-btn:hover { background: var(--primary-light); color: var(--primary); }
+        .verb-btn.active { background: var(--primary); color: white; }
+        .verb-btn.hidden { display: none; }
+
+        /* Detail panel */
+        .detail-panel { flex: 1; overflow-y: auto; padding: 20px 24px 40px; }
+        .detail-panel .placeholder {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 60%; color: var(--muted); font-size: 1.1rem; gap: 10px;
+        }
+
+        /* Verb header */
+        .verb-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+        .verb-title { font-size: 2rem; font-weight: 900; cursor: pointer; }
+        .verb-title:hover { color: var(--primary); }
+        .verb-cn { font-size: 1rem; color: var(--muted); }
+        .verb-aux { font-size: 0.8rem; padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+        .aux-avoir { background: #dbeafe; color: #1d4ed8; }
+        .aux-etre  { background: #fce7f3; color: #9d174d; }
+        [data-theme="dark"] .aux-avoir { background: #1e3a5f; color: #93c5fd; }
+        [data-theme="dark"] .aux-etre  { background: #4a1942; color: #f9a8d4; }
+
+        /* All-tenses grid */
+        .all-tenses {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        /* Tense block */
+        .tense-block { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; }
+        .tense-head {
+            padding: 8px 14px 7px; border-bottom: 1.5px solid var(--border);
+            background: var(--primary-light);
+        }
+        .tense-cn { font-size: 0.78rem; font-weight: 800; color: var(--primary); letter-spacing: 0.04em; }
+        .tense-en { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
+
+        /* Conjugation rows */
+        .cj-table { width: 100%; border-collapse: collapse; }
+        .cj-row { cursor: pointer; transition: background 0.1s; border-bottom: 1px solid var(--border); }
+        .cj-row:last-child { border-bottom: none; }
+        .cj-row:hover { background: var(--primary-light); }
+        .cj-row:hover .cj-form { color: var(--primary); }
+        .cj-pro {
+            padding: 6px 6px 6px 14px; font-size: 0.76rem; color: var(--muted);
+            white-space: nowrap; width: 1px;
+        }
+        .cj-form { padding: 6px 4px; font-size: 0.97rem; font-weight: 800; color: var(--text-strong); }
+        .cj-ipa {
+            padding: 6px 14px 6px 4px; font-size: 0.67rem; color: var(--muted);
+            font-family: monospace; text-align: right; white-space: nowrap;
+        }
+
+        /* Simple form (participle / gerund) */
+        .simple-wrap { padding: 16px 14px; display: flex; align-items: baseline; gap: 12px; cursor: pointer; }
+        .simple-wrap:hover .sf-word { color: var(--primary); }
+        .sf-word { font-size: 1.6rem; font-weight: 900; }
+        .sf-ipa { font-size: 0.78rem; color: var(--muted); font-family: monospace; }
+
+        /* Passé composé */
+        .pc-note {
+            font-size: 0.78rem; color: var(--muted); padding: 8px 14px;
+            border-top: 1.5px solid var(--border); background: var(--primary-light);
+            line-height: 1.6;
+        }
+        .pc-note strong { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html">← 返回</a>
+        <h1>🔤 动词变位</h1>
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search" placeholder="搜索动词…" oninput="filterVerbs(this.value)">
+        </div>
+    </div>
+    <div class="main">
+        <div class="verb-list" id="verb-list"></div>
+        <div class="detail-panel" id="detail-panel">
+            <div class="placeholder">
+                <span style="font-size:3rem">🔤</span>
+                <span>从左侧选择一个动词</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ── Tense config ──────────────────────────────────────────────
+const TENSE_ORDER = [
+    'Indicative Present',
+    'Indicative Imperfect',
+    'Indicative Future',
+    'Indicative Conditional',
+    'Passé Composé',
+    'Indicative Past Historic',
+    'Subjunctive Present',
+    'Subjunctive Imperfect',
+    'Imperative Simple',
+    'Past Participle',
+    'Present Participle / Gerund',
+];
+const TENSE_CN = {
+    'Indicative Present':           '现在时',
+    'Indicative Imperfect':         '未完成时',
+    'Indicative Future':            '将来时',
+    'Indicative Conditional':       '条件式',
+    'Passé Composé':                '复合过去时',
+    'Indicative Past Historic':     '简单过去时',
+    'Subjunctive Present':          '虚拟现在时',
+    'Subjunctive Imperfect':        '虚拟未完成时',
+    'Imperative Simple':            '命令式',
+    'Past Participle':              '过去分词',
+    'Present Participle / Gerund':  '现在分词/副动词',
+};
+
+const ETRE_VERBS = new Set([
+    'ALLER','VENIR','REVENIR','DEVENIR','PARTIR','SORTIR','MOURIR',
+    'SOUVENIR','SURVIVRE','FUIR','DISPARAÎTRE',
+]);
+const AUX_AVOIR_PRES  = ['ai','as','a','avons','avez','ont'];
+const AUX_ETRE_PRES   = ['suis','es','est','sommes','êtes','sont'];
+
+const VERB_CN = {
+    ÊTRE:'是/在', AVOIR:'有/助动词', ALLER:'去', FAIRE:'做',
+    DIRE:'说', VENIR:'来', VOIR:'看', SAVOIR:'知道',
+    POUVOIR:'能/可以', VOULOIR:'想要', DEVOIR:'必须',
+    PRENDRE:'拿/乘', METTRE:'放置', PARTIR:'出发', SORTIR:'出去',
+    REVENIR:'回来', DEVENIR:'变成', TENIR:'持有',
+    OBTENIR:'获得', APPRENDRE:'学习', COMPRENDRE:'理解',
+    REPRENDRE:'重新开始', PERMETTRE:'允许', REMETTRE:'重新放置',
+    CROIRE:'相信', BOIRE:'喝', LIRE:'读', ÉCRIRE:'写',
+    VIVRE:'生活', SURVIVRE:'生存', CONDUIRE:'驾驶', CONSTRUIRE:'建造',
+    MOURIR:'死亡', NAÎTRE:'出生', COURIR:'跑', DORMIR:'睡觉',
+    MENTIR:'撒谎', SENTIR:'感觉/闻', SERVIR:'服务',
+    FUIR:'逃跑', JOINDRE:'加入', BATTRE:'打',
+    OUVRIR:'打开', RIRE:'笑', TAIRE:'沉默', ASSEOIR:'坐',
+    RECEVOIR:'收到', FOUTRE:'（俚语）做', SOUVENIR:'记得',
+    DISPARAÎTRE:'消失',
+};
+
+// Build correct TTS phrase with French elision.
+// For "je" + vowel-start: merge without apostrophe → "jallais", "japprenais"
+// French TTS reads "j" + vowel as [ʒ] naturally, and avoids the pause
+// that apostrophe-based contractions cause for some forms.
+const VOWELS = /^[aeiouhyàâäéèêëîïôùûüœæ]/i;
+function ttsPhrase(rawPronoun, form) {
+    const pro = rawPronoun.split(',')[0].trim(); // drop feminine variant
+    if (VOWELS.test(form)) {
+        if (pro === 'je') return 'j' + form;                       // jallais, japprenais
+        if (pro.endsWith(' je')) return pro.slice(0, -2) + 'j' + form; // que jaille
+    }
+    return pro + ' ' + form;
+}
+
+function speak(text) { frSettings.speak(text); }
+
+function parseConjTable(html) {
+    if (!html || !html.includes('<tr>')) {
+        const text = html.replace(/<[^>]+>/g, '').trim();
+        return { type: 'simple', form: text };
+    }
+    const cells = [];
+    const re = /<th>(.*?)<\/th>/g;
+    let m;
+    while ((m = re.exec(html)) !== null) cells.push(m[1]);
+    if (cells.length >= 18) {
+        return {
+            type: 'full',
+            rows: [
+                // 6 rows: [pronoun, form, ipa]
+                [cells[0], cells[3], cells[6]],
+                [cells[1], cells[4], cells[7]],
+                [cells[2], cells[5], cells[8]],
+                [cells[9], cells[12], cells[15]],
+                [cells[10], cells[13], cells[16]],
+                [cells[11], cells[14], cells[17]],
+            ],
+        };
+    }
+    if (cells.length >= 9) {
+        return {
+            type: 'imp',
+            rows: [
+                [cells[0], cells[3], cells[6]],
+                [cells[1], cells[4], cells[7]],
+                [cells[2], cells[5], cells[8]],
+            ],
+        };
+    }
+    return { type: 'simple', form: cells.join(', ') };
+}
+
+// Build a <table class="cj-table"> from rows [[pronoun, form, ipa], ...]
+function buildConjTable(rows) {
+    const table = document.createElement('table');
+    table.className = 'cj-table';
+    rows.forEach(([pro, form, ipa]) => {
+        const tr = document.createElement('tr');
+        tr.className = 'cj-row';
+        const ttsSpeech = ttsPhrase(pro, form);
+        tr.onclick = () => speak(ttsSpeech);
+        tr.innerHTML = `
+            <td class="cj-pro">${pro}</td>
+            <td class="cj-form">${form}</td>
+            <td class="cj-ipa">${ipa || ''}</td>
+        `;
+        table.appendChild(tr);
+    });
+    return table;
+}
+
+function renderTenseBlock(verb, tenseKey) {
+    const block = document.createElement('div');
+    block.className = 'tense-block';
+
+    const head = document.createElement('div');
+    head.className = 'tense-head';
+    head.innerHTML = `<div class="tense-cn">${TENSE_CN[tenseKey] || tenseKey}</div><div class="tense-en">${tenseKey}</div>`;
+    block.appendChild(head);
+
+    if (tenseKey === 'Passé Composé') {
+        const useEtre = ETRE_VERBS.has(verb);
+        const auxForms = useEtre ? AUX_ETRE_PRES : AUX_AVOIR_PRES;
+        const ppData = CONJUGATION_DATA[verb]['Past Participle'];
+        // Fallback for verbs missing Past Participle in Anki data (e.g. ÊTRE → été)
+        const PP_FALLBACK = { 'ÊTRE': 'été' };
+        const pp = ppData ? parseConjTable(ppData.html).form || PP_FALLBACK[verb] || '?'
+                          : (PP_FALLBACK[verb] || '?');
+        const pros = ['je', 'tu', 'il, elle', 'nous', 'vous', 'ils, elles'];
+        const auxVerb = useEtre ? 'être' : 'avoir';
+
+        const table = document.createElement('table');
+        table.className = 'cj-table';
+        pros.forEach((pro, i) => {
+            const aux = auxForms[i];
+            const full = ttsPhrase(pro, `${aux} ${pp}`);
+            const tr = document.createElement('tr');
+            tr.className = 'cj-row';
+            tr.onclick = () => speak(full);
+            tr.innerHTML = `
+                <td class="cj-pro">${pro}</td>
+                <td class="cj-form" style="font-size:0.88rem">
+                    <span style="color:var(--primary)">${aux}</span>
+                    <span style="color:var(--muted);padding:0 3px;font-weight:400">+</span>
+                    ${pp}
+                </td>
+                <td class="cj-ipa"></td>
+            `;
+            table.appendChild(tr);
+        });
+        block.appendChild(table);
+
+        const note = document.createElement('div');
+        note.className = 'pc-note';
+        note.innerHTML = useEtre
+            ? `<strong>être</strong> + p.p.，过去分词需与主语<strong>性数一致</strong>`
+            : `<strong>avoir</strong> + p.p.，过去分词通常不变`;
+        block.appendChild(note);
+        return block;
+    }
+
+    const data = CONJUGATION_DATA[verb][tenseKey];
+    if (!data) return null;
+    const parsed = parseConjTable(data.html);
+
+    if (parsed.type === 'simple') {
+        const wrap = document.createElement('div');
+        wrap.className = 'simple-wrap';
+        wrap.onclick = () => speak(parsed.form);
+        wrap.innerHTML = `<span class="sf-word">${parsed.form}</span>`;
+        // Try to find IPA from flat string or leave blank
+        block.appendChild(wrap);
+        return block;
+    }
+
+    block.appendChild(buildConjTable(parsed.rows));
+    return block;
+}
+
+// ── Show verb ───────────────────────────────────────────────────
+function showVerb(verb) {
+    document.querySelectorAll('.verb-btn').forEach(b => b.classList.toggle('active', b.dataset.verb === verb));
+
+    const panel = document.getElementById('detail-panel');
+    panel.innerHTML = '';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'verb-header';
+    const useEtre = ETRE_VERBS.has(verb);
+    const auxLabel = useEtre ? '助动词: être' : '助动词: avoir';
+    const auxClass = useEtre ? 'aux-etre' : 'aux-avoir';
+    header.innerHTML = `
+        <span class="verb-title" onclick="speak('${verb.toLowerCase()}')">${verb.charAt(0)+verb.slice(1).toLowerCase()}</span>
+        <span class="verb-cn">${VERB_CN[verb] || ''}</span>
+        <span class="verb-aux ${auxClass}">${auxLabel}</span>
+    `;
+    panel.appendChild(header);
+
+    // All tenses grid
+    const grid = document.createElement('div');
+    grid.className = 'all-tenses';
+
+    TENSE_ORDER.forEach(tenseKey => {
+        if (tenseKey !== 'Passé Composé' && !CONJUGATION_DATA[verb][tenseKey]) return;
+        const block = renderTenseBlock(verb, tenseKey);
+        if (block) grid.appendChild(block);
+    });
+
+    panel.appendChild(grid);
+}
+
+// ── Verb list ───────────────────────────────────────────────────
+const verbs = Object.keys(CONJUGATION_DATA).sort();
+const listEl = document.getElementById('verb-list');
+verbs.forEach(verb => {
+    const btn = document.createElement('button');
+    btn.className = 'verb-btn';
+    btn.dataset.verb = verb;
+    btn.textContent = verb.charAt(0) + verb.slice(1).toLowerCase();
+    btn.onclick = () => showVerb(verb);
+    listEl.appendChild(btn);
+});
+
+function filterVerbs(q) {
+    const lq = q.toLowerCase();
+    document.querySelectorAll('.verb-btn').forEach(btn => {
+        btn.classList.toggle('hidden', !btn.dataset.verb.toLowerCase().includes(lq));
+    });
+}
+
+showVerb(verbs[0]);
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语颜色词汇 — Les Couleurs</title>
+    <script src="settings.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+        h1   { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--primary);
+            border-bottom: 2px solid var(--border); padding-bottom: 6px;
+            margin: 28px 0 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px 14px 12px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            text-align: center;
+            position: relative;
+        }
+        .card:hover  { box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .card.playing { background: var(--primary-light); border-color: var(--primary); }
+
+        /* Color swatch */
+        .swatch {
+            width: 56px; height: 56px; border-radius: 50%;
+            margin: 0 auto 10px;
+            border: 3px solid rgba(0,0,0,0.12);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            transition: transform 0.2s;
+        }
+        .card:hover .swatch { transform: scale(1.12); }
+
+        .card-fr   { font-size: 1rem; font-weight: 700; color: var(--text-strong); display: block; margin-bottom: 2px; }
+        .card-ipa  { font-size: 0.72rem; color: var(--muted); display: block; margin-bottom: 3px; font-family: monospace; }
+        .card-cn   { font-size: 0.88rem; color: var(--muted); display: block; margin-bottom: 4px; }
+        .card-fem  { font-size: 0.72rem; color: var(--primary); font-style: italic; }
+
+        .play-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%; border: none;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .play-btn:hover { background: var(--primary); color: white; }
+
+        /* Read-all strip */
+        .read-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; justify-content: flex-end; }
+        .read-btn {
+            background: var(--primary); color: white;
+            border: none; border-radius: 999px;
+            padding: 6px 16px; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: filter 0.15s;
+        }
+        .read-btn:hover { filter: brightness(0.88); }
+        .read-btn.stop { background: #e04040; }
+
+        /* Grammar note */
+        .note-box {
+            background: var(--primary-light); border-radius: 12px;
+            padding: 14px 18px; margin-top: 20px;
+            font-size: 0.88rem; line-height: 1.8; color: var(--text);
+        }
+        .note-box strong { color: var(--primary); }
+        .note-box ul { margin: 6px 0 0 16px; padding: 0; }
+
+        /* Gradient preview band */
+        .rainbow-band {
+            height: 10px; border-radius: 999px;
+            background: linear-gradient(90deg,
+                #e74c3c, #e67e22, #f1c40f, #2ecc71,
+                #3498db, #9b59b6, #ff69b4, #ffffff, #808080, #000000);
+            margin-bottom: 24px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="back"><a href="index.html">← 返回总目录</a></div>
+    <h1>🎨 颜色</h1>
+    <p class="subtitle">Les Couleurs — 点击卡片朗读，悬停看色块动画</p>
+    <div class="rainbow-band"></div>
+
+    <!-- ══════════════ 基础颜色 ══════════════ -->
+    <div class="section-title">
+        🌈 基础颜色
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" id="btn-basic" onclick="readSection('basic', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="basic"></div>
+
+    <!-- ══════════════ 深浅变体 ══════════════ -->
+    <div class="section-title">
+        🖌️ 深浅变体
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" id="btn-shades" onclick="readSection('shades', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="shades"></div>
+
+    <!-- ══════════════ 描述色调 ══════════════ -->
+    <div class="section-title">
+        ✨ 描述色调
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" id="btn-desc" onclick="readSection('desc', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="desc"></div>
+
+    <!-- Grammar note -->
+    <div class="note-box">
+        <strong>📝 语法提示</strong>
+        <ul>
+            <li><strong>颜色形容词通常放在名词后面：</strong>une robe rouge（一件红色的裙子）</li>
+            <li><strong>大多数颜色有阴阳性变化：</strong>blanc → blanche，vert → verte</li>
+            <li><strong>例外：orange、rose、marron 没有阴性变化形式</strong>（借词）</li>
+            <li><strong>颜色复合词不变化：</strong>bleu clair、vert foncé（单独使用时不加 e/s）</li>
+            <li><strong>用 clair（浅）和 foncé（深）描述深浅</strong></li>
+        </ul>
+    </div>
+
+    <script>
+    const DATA = {
+        basic: [
+            { fr:'rouge',   fem:'rouge',    cn:'红色',   ipa:'/ʁuʒ/',    hex:'#e74c3c' },
+            { fr:'orange',  fem:'orange',   cn:'橙色',   ipa:'/ɔʁɑ̃ʒ/',  hex:'#e67e22' },
+            { fr:'jaune',   fem:'jaune',    cn:'黄色',   ipa:'/ʒon/',    hex:'#f1c40f' },
+            { fr:'vert',    fem:'verte',    cn:'绿色',   ipa:'/vɛʁ/',    hex:'#27ae60' },
+            { fr:'bleu',    fem:'bleue',    cn:'蓝色',   ipa:'/blø/',    hex:'#2980b9' },
+            { fr:'violet',  fem:'violette', cn:'紫色',   ipa:'/vjɔlɛ/',  hex:'#8e44ad' },
+            { fr:'rose',    fem:'rose',     cn:'粉红色', ipa:'/ʁoz/',    hex:'#ff69b4' },
+            { fr:'blanc',   fem:'blanche',  cn:'白色',   ipa:'/blɑ̃/',   hex:'#f5f5f5', border:'#ccc' },
+            { fr:'noir',    fem:'noire',    cn:'黑色',   ipa:'/nwaʁ/',   hex:'#1a1a1a' },
+            { fr:'gris',    fem:'grise',    cn:'灰色',   ipa:'/ɡʁi/',    hex:'#7f8c8d' },
+            { fr:'marron',  fem:'marron',   cn:'棕色',   ipa:'/maʁɔ̃/',  hex:'#795548' },
+            { fr:'brun',    fem:'brune',    cn:'深棕色（发色/肤色）', ipa:'/bʁœ̃/', hex:'#5d3a1a' },
+            { fr:'beige',   fem:'beige',    cn:'米色',   ipa:'/bɛʒ/',    hex:'#d4b896' },
+        ],
+        shades: [
+            { fr:'bleu clair',   fem:'bleu clair',   cn:'浅蓝色', ipa:'/blø klɛʁ/',   hex:'#74b9e8' },
+            { fr:'bleu foncé',   fem:'bleu foncé',   cn:'深蓝色', ipa:'/blø fɔ̃se/',  hex:'#1a3a6b' },
+            { fr:'vert clair',   fem:'vert clair',   cn:'浅绿色', ipa:'/vɛʁ klɛʁ/',   hex:'#82c882' },
+            { fr:'vert foncé',   fem:'vert foncé',   cn:'深绿色', ipa:'/vɛʁ fɔ̃se/',  hex:'#1a5c1a' },
+            { fr:'rouge vif',    fem:'rouge vif',    cn:'鲜红色', ipa:'/ʁuʒ vif/',    hex:'#ff1a1a' },
+            { fr:'jaune pâle',   fem:'jaune pâle',   cn:'淡黄色', ipa:'/ʒon pɑl/',    hex:'#fff176' },
+        ],
+        desc: [
+            { fr:'clair',     fem:'claire',     cn:'浅（色）', ipa:'/klɛʁ/',   hex:'#dfe6e9' },
+            { fr:'foncé',     fem:'foncée',     cn:'深（色）', ipa:'/fɔ̃se/',  hex:'#2d3436' },
+            { fr:'vif',       fem:'vive',       cn:'鲜艳的',   ipa:'/vif/',    hex:'#e84393' },
+            { fr:'pâle',      fem:'pâle',       cn:'苍白的',   ipa:'/pɑl/',    hex:'#fab1d3' },
+            { fr:'lumineux',  fem:'lumineuse',  cn:'明亮的',   ipa:'/lyminø/', hex:'#fdcb6e' },
+            { fr:'sombre',    fem:'sombre',     cn:'暗沉的',   ipa:'/sɔ̃bʁ/', hex:'#636e72' },
+            { fr:'multicolore', fem:'multicolore', cn:'多彩的', ipa:'/myltikɔlɔʁ/', hex:'linear-gradient(135deg,#e74c3c,#f1c40f,#2ecc71,#3498db,#9b59b6)' },
+        ]
+    };
+
+    let readTimer = null;
+    let readStopped = false;
+
+    function speak(text, cb) { frSettings.speak(text, cb); }
+
+    function makeCard(item, sectionId) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.fr = item.fr;
+        card.onclick = function() { playCard(this); };
+
+        const swatchDiv = document.createElement('div');
+        swatchDiv.className = 'swatch';
+        if (item.hex && item.hex.startsWith('linear-gradient')) {
+            swatchDiv.style.background = item.hex;
+        } else {
+            swatchDiv.style.background = item.hex || '#ccc';
+            if (item.border) swatchDiv.style.borderColor = item.border;
+        }
+
+        const femText = item.fem && item.fem !== item.fr
+            ? `<span class="card-fem">fém. ${item.fem}</span>`
+            : '<span class="card-fem" style="opacity:0.4">invariable</span>';
+
+        card.appendChild(swatchDiv);
+        card.innerHTML += `
+            <span class="card-fr">${item.fr}</span>
+            <span class="card-ipa">${item.ipa}</span>
+            <span class="card-cn">${item.cn}</span>
+            ${femText}
+            <button class="play-btn" onclick="event.stopPropagation();playCard(this.parentElement)">▶</button>
+        `;
+        return card;
+    }
+
+    function playCard(card) {
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        card.classList.add('playing');
+        speak(card.dataset.fr, () => card.classList.remove('playing'));
+    }
+
+    function readSection(sectionId, btn) {
+        if (btn.classList.contains('stop')) {
+            readStopped = true;
+            clearTimeout(readTimer);
+            btn.textContent = '顺序朗读';
+            btn.classList.remove('stop');
+            document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+            return;
+        }
+        const items = DATA[sectionId];
+        let i = 0;
+        readStopped = false;
+        btn.textContent = '停止';
+        btn.classList.add('stop');
+
+        function next() {
+            if (readStopped || i >= items.length) {
+                btn.textContent = '顺序朗读';
+                btn.classList.remove('stop');
+                document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+                return;
+            }
+            const cards = document.querySelectorAll(`#${sectionId} .card`);
+            cards.forEach(c => c.classList.remove('playing'));
+            if (cards[i]) cards[i].classList.add('playing');
+            speak(items[i].fr, () => { i++; readTimer = setTimeout(next, 300); });
+        }
+        next();
+    }
+
+    // Render all sections
+    Object.keys(DATA).forEach(sectionId => {
+        const container = document.getElementById(sectionId);
+        DATA[sectionId].forEach(item => container.appendChild(makeCard(item, sectionId)));
+    });
+    </script>
+</body>
+</html>

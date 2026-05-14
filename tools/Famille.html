@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语家庭成员词汇 — La Famille</title>
+    <script src="settings.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+        h1   { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--primary);
+            border-bottom: 2px solid var(--border); padding-bottom: 6px;
+            margin: 28px 0 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px 14px 12px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            text-align: center;
+            position: relative;
+        }
+        .card:hover  { box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .card.playing { background: var(--primary-light); border-color: var(--primary); }
+
+        /* Gender colour strip */
+        .masc { border-top: 4px solid #2196f3; }
+        .fem  { border-top: 4px solid #e91e8c; }
+        .neu  { border-top: 4px solid var(--primary); }
+
+        .card-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .card-fr   { font-size: 1rem; font-weight: 700; color: var(--text-strong); display: block; margin-bottom: 2px; }
+        .card-ipa  { font-size: 0.72rem; color: var(--muted); display: block; margin-bottom: 3px; font-family: monospace; }
+        .card-cn   { font-size: 0.88rem; color: var(--muted); display: block; margin-bottom: 4px; }
+        .card-pair { font-size: 0.7rem; color: var(--primary); font-style: italic; }
+
+        .play-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%; border: none;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .play-btn:hover { background: var(--primary); color: white; }
+
+        /* Gender legend */
+        .legend {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            font-size: 0.78rem; margin-bottom: 16px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; color: var(--muted); font-weight: 600; }
+        .legend-dot  { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-m { background: #2196f3; }
+        .dot-f { background: #e91e8c; }
+
+        /* Read-all strip */
+        .read-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; justify-content: flex-end; }
+        .read-btn {
+            background: var(--primary); color: white;
+            border: none; border-radius: 999px;
+            padding: 6px 16px; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: filter 0.15s;
+        }
+        .read-btn:hover { filter: brightness(0.88); }
+        .read-btn.stop { background: #e04040; }
+
+        /* Grammar note */
+        .note-box {
+            background: var(--primary-light); border-radius: 12px;
+            padding: 14px 18px; margin-top: 20px;
+            font-size: 0.88rem; line-height: 1.8; color: var(--text);
+        }
+        .note-box strong { color: var(--primary); }
+
+        /* Family tree diagram */
+        .tree-wrap {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: var(--shadow-sm); padding: 20px;
+            margin-bottom: 24px; overflow-x: auto;
+        }
+        .tree {
+            display: flex; flex-direction: column; align-items: center; gap: 0;
+            min-width: 480px;
+        }
+        .tree-row { display: flex; justify-content: center; gap: 12px; }
+        .tree-node {
+            background: var(--primary-light); color: var(--primary);
+            border-radius: 10px; padding: 6px 12px;
+            font-size: 0.8rem; font-weight: 700; text-align: center;
+            cursor: pointer; transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .tree-node:hover { background: var(--primary); color: white; }
+        .tree-node small { display: block; font-weight: 400; font-size: 0.68rem; opacity: 0.8; }
+        .tree-line {
+            width: 1px; height: 20px; background: var(--border);
+            margin: 0 auto;
+        }
+        .tree-hline {
+            height: 1px; background: var(--border);
+            align-self: center; flex: 1; max-width: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="back"><a href="index.html">← 返回总目录</a></div>
+    <h1>👨‍👩‍👧‍👦 家庭成员</h1>
+    <p class="subtitle">La Famille — 点击卡片朗读，蓝色边框 = 阳性，粉色边框 = 阴性</p>
+
+    <!-- Gender legend -->
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot dot-m"></div>阳性 masculin</div>
+        <div class="legend-item"><div class="legend-dot dot-f"></div>阴性 féminin</div>
+    </div>
+
+    <!-- ══════════════ 家庭树 ══════════════ -->
+    <div class="tree-wrap">
+        <div class="tree">
+            <!-- Grandparents -->
+            <div class="tree-row">
+                <div class="tree-node" onclick="speakText('le grand-père')">le grand-père<small>祖父／外祖父</small></div>
+                <div class="tree-node" onclick="speakText('la grand-mère')">la grand-mère<small>祖母／外祖母</small></div>
+            </div>
+            <div class="tree-line"></div>
+            <!-- Parents -->
+            <div class="tree-row">
+                <div class="tree-node" onclick="speakText('le père')">le père<small>父亲</small></div>
+                <div class="tree-hline"></div>
+                <div class="tree-node" onclick="speakText('la mère')">la mère<small>母亲</small></div>
+            </div>
+            <div class="tree-line"></div>
+            <!-- Children -->
+            <div class="tree-row">
+                <div class="tree-node" onclick="speakText('le frère')">le frère<small>兄弟</small></div>
+                <div class="tree-hline"></div>
+                <div class="tree-node" onclick="speakText('moi')">moi<small>我</small></div>
+                <div class="tree-hline"></div>
+                <div class="tree-node" onclick="speakText('la sœur')">la sœur<small>姐妹</small></div>
+            </div>
+            <div class="tree-line"></div>
+            <!-- My family -->
+            <div class="tree-row">
+                <div class="tree-node" onclick="speakText('le mari')">le mari<small>丈夫</small></div>
+                <div class="tree-hline"></div>
+                <div class="tree-node" onclick="speakText('la femme')">la femme<small>妻子</small></div>
+            </div>
+            <div class="tree-line"></div>
+            <div class="tree-row">
+                <div class="tree-node" onclick="speakText('le fils')">le fils<small>儿子</small></div>
+                <div class="tree-hline"></div>
+                <div class="tree-node" onclick="speakText('la fille')">la fille<small>女儿</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ 直系亲属 ══════════════ -->
+    <div class="section-title">👨‍👩‍👧 直系亲属 La Famille Proche</div>
+    <div class="read-bar">
+        <button class="read-btn" id="btn-proche" onclick="readAll('proche')">▶ 顺序朗读</button>
+    </div>
+    <div class="grid" id="group-proche">
+        <div class="card masc" onclick="speak(this)" data-fr="le père">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👨</span>
+            <span class="card-fr">le père</span>
+            <span class="card-ipa">[lə pɛʁ]</span>
+            <span class="card-cn">父亲</span>
+            <span class="card-pair">↔ la mère</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la mère">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👩</span>
+            <span class="card-fr">la mère</span>
+            <span class="card-ipa">[la mɛʁ]</span>
+            <span class="card-cn">母亲</span>
+            <span class="card-pair">↔ le père</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le frère">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👦</span>
+            <span class="card-fr">le frère</span>
+            <span class="card-ipa">[lə fʁɛʁ]</span>
+            <span class="card-cn">兄弟</span>
+            <span class="card-pair">↔ la sœur</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la sœur">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👧</span>
+            <span class="card-fr">la sœur</span>
+            <span class="card-ipa">[la sœʁ]</span>
+            <span class="card-cn">姐妹</span>
+            <span class="card-pair">↔ le frère</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le fils">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🧒</span>
+            <span class="card-fr">le fils</span>
+            <span class="card-ipa">[lə fis]</span>
+            <span class="card-cn">儿子</span>
+            <span class="card-pair">↔ la fille</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la fille">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👧</span>
+            <span class="card-fr">la fille</span>
+            <span class="card-ipa">[la fij]</span>
+            <span class="card-cn">女儿</span>
+            <span class="card-pair">↔ le fils</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le mari">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💍</span>
+            <span class="card-fr">le mari</span>
+            <span class="card-ipa">[lə ma.ʁi]</span>
+            <span class="card-cn">丈夫</span>
+            <span class="card-pair">↔ la femme</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la femme">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💍</span>
+            <span class="card-fr">la femme</span>
+            <span class="card-ipa">[la fam]</span>
+            <span class="card-cn">妻子／女人</span>
+            <span class="card-pair">↔ le mari</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="les parents">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👨‍👩‍👦</span>
+            <span class="card-fr">les parents</span>
+            <span class="card-ipa">[le pa.ʁɑ̃]</span>
+            <span class="card-cn">父母</span>
+        </div>
+        <div class="card neu" onclick="speak(this)" data-fr="les enfants">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👶</span>
+            <span class="card-fr">les enfants</span>
+            <span class="card-ipa">[le zɑ̃.fɑ̃]</span>
+            <span class="card-cn">孩子们</span>
+        </div>
+    </div>
+
+    <!-- ══════════════ 祖父母 ══════════════ -->
+    <div class="section-title">👴👵 祖父母 Les Grands-Parents</div>
+    <div class="grid" id="group-grands">
+        <div class="card masc" onclick="speak(this)" data-fr="le grand-père">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👴</span>
+            <span class="card-fr">le grand-père</span>
+            <span class="card-ipa">[ɡʁɑ̃.pɛʁ]</span>
+            <span class="card-cn">祖父／外祖父</span>
+            <span class="card-pair">↔ la grand-mère</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la grand-mère">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👵</span>
+            <span class="card-fr">la grand-mère</span>
+            <span class="card-ipa">[ɡʁɑ̃.mɛʁ]</span>
+            <span class="card-cn">祖母／外祖母</span>
+            <span class="card-pair">↔ le grand-père</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le petit-fils">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🧒</span>
+            <span class="card-fr">le petit-fils</span>
+            <span class="card-ipa">[pə.ti fis]</span>
+            <span class="card-cn">孙子／外孙</span>
+            <span class="card-pair">↔ la petite-fille</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la petite-fille">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👧</span>
+            <span class="card-fr">la petite-fille</span>
+            <span class="card-ipa">[pə.tit fij]</span>
+            <span class="card-cn">孙女／外孙女</span>
+            <span class="card-pair">↔ le petit-fils</span>
+        </div>
+        <div class="card neu" onclick="speak(this)" data-fr="les grands-parents">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👴👵</span>
+            <span class="card-fr">les grands-parents</span>
+            <span class="card-ipa">[ɡʁɑ̃.pa.ʁɑ̃]</span>
+            <span class="card-cn">祖父母</span>
+        </div>
+        <div class="card neu" onclick="speak(this)" data-fr="les petits-enfants">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👶👶</span>
+            <span class="card-fr">les petits-enfants</span>
+            <span class="card-ipa">[pə.ti zɑ̃.fɑ̃]</span>
+            <span class="card-cn">孙辈</span>
+        </div>
+    </div>
+
+    <!-- ══════════════ 叔舅姑姨 ══════════════ -->
+    <div class="section-title">👨‍👧 叔舅姑姨 Oncles &amp; Tantes</div>
+    <div class="grid" id="group-oncles">
+        <div class="card masc" onclick="speak(this)" data-fr="l'oncle">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👨</span>
+            <span class="card-fr">l'oncle</span>
+            <span class="card-ipa">[lɔ̃kl]</span>
+            <span class="card-cn">叔叔／舅舅／伯父</span>
+            <span class="card-pair">↔ la tante</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la tante">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👩</span>
+            <span class="card-fr">la tante</span>
+            <span class="card-ipa">[la tɑ̃t]</span>
+            <span class="card-cn">姑姑／阿姨</span>
+            <span class="card-pair">↔ l'oncle</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le cousin">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🧑</span>
+            <span class="card-fr">le cousin</span>
+            <span class="card-ipa">[ku.zɛ̃]</span>
+            <span class="card-cn">表兄弟／堂兄弟</span>
+            <span class="card-pair">↔ la cousine</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la cousine">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🧑</span>
+            <span class="card-fr">la cousine</span>
+            <span class="card-ipa">[ku.zin]</span>
+            <span class="card-cn">表姐妹／堂姐妹</span>
+            <span class="card-pair">↔ le cousin</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le neveu">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👦</span>
+            <span class="card-fr">le neveu</span>
+            <span class="card-ipa">[nə.vø]</span>
+            <span class="card-cn">侄子／外甥</span>
+            <span class="card-pair">↔ la nièce</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la nièce">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👧</span>
+            <span class="card-fr">la nièce</span>
+            <span class="card-ipa">[njɛs]</span>
+            <span class="card-cn">侄女／外甥女</span>
+            <span class="card-pair">↔ le neveu</span>
+        </div>
+    </div>
+
+    <!-- ══════════════ 姻亲 ══════════════ -->
+    <div class="section-title">💒 姻亲 La Belle-Famille</div>
+    <div class="grid" id="group-belle">
+        <div class="card masc" onclick="speak(this)" data-fr="le beau-père">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👨</span>
+            <span class="card-fr">le beau-père</span>
+            <span class="card-ipa">[bo.pɛʁ]</span>
+            <span class="card-cn">岳父／公公</span>
+            <span class="card-pair">↔ la belle-mère</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la belle-mère">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">👩</span>
+            <span class="card-fr">la belle-mère</span>
+            <span class="card-ipa">[bɛl.mɛʁ]</span>
+            <span class="card-cn">岳母／婆婆</span>
+            <span class="card-pair">↔ le beau-père</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le beau-frère">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🤝</span>
+            <span class="card-fr">le beau-frère</span>
+            <span class="card-ipa">[bo.fʁɛʁ]</span>
+            <span class="card-cn">大伯／连襟／姐夫</span>
+            <span class="card-pair">↔ la belle-sœur</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la belle-sœur">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">🤝</span>
+            <span class="card-fr">la belle-sœur</span>
+            <span class="card-ipa">[bɛl.sœʁ]</span>
+            <span class="card-cn">弟媳／妯娌／嫂子</span>
+            <span class="card-pair">↔ le beau-frère</span>
+        </div>
+        <div class="card masc" onclick="speak(this)" data-fr="le fiancé">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💍</span>
+            <span class="card-fr">le fiancé</span>
+            <span class="card-ipa">[fjɑ̃.se]</span>
+            <span class="card-cn">未婚夫</span>
+            <span class="card-pair">↔ la fiancée</span>
+        </div>
+        <div class="card fem" onclick="speak(this)" data-fr="la fiancée">
+            <button class="play-btn" onclick="event.stopPropagation();speak(this.parentElement)">▶</button>
+            <span class="card-icon">💍</span>
+            <span class="card-fr">la fiancée</span>
+            <span class="card-ipa">[fjɑ̃.se]</span>
+            <span class="card-cn">未婚妻</span>
+            <span class="card-pair">↔ le fiancé</span>
+        </div>
+    </div>
+
+    <div class="note-box">
+        💡 <strong>性数规律：</strong>很多家庭词汇通过 <strong>le/la</strong> 区分性别，
+        不需要改变词尾。如 <em>le cousin → la cousine</em>，
+        加 <strong>-e</strong> 变阴性。<br>
+        <strong>belle-famille</strong> 前缀 <em>beau/belle</em> 表示"姻亲"关系。<br>
+        <em>J'ai deux frères et une sœur.</em> — 我有两个兄弟和一个姐妹。<br>
+        <em>Mes parents habitent à Paris.</em> — 我父母住在巴黎。
+    </div>
+
+<script>
+function speak(card) {
+    document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+    card.classList.add('playing');
+    frSettings.speak(card.dataset.fr, () => card.classList.remove('playing'));
+}
+
+function speakText(text) {
+    frSettings.speak(text);
+}
+
+const readState = {};
+
+function readAll(groupId) {
+    const btn = document.getElementById('btn-' + groupId);
+    if (readState[groupId]?.playing) {
+        window.speechSynthesis.cancel();
+        readState[groupId].playing = false;
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        btn.textContent = '▶ 顺序朗读';
+        btn.classList.remove('stop');
+        return;
+    }
+    const group = document.getElementById('group-' + groupId);
+    const cards = [...group.querySelectorAll('.card')];
+    readState[groupId] = { idx: 0, cards, playing: true };
+    btn.textContent = '⏹ 停止';
+    btn.classList.add('stop');
+    speakNext(groupId);
+}
+
+function speakNext(groupId) {
+    const state = readState[groupId];
+    if (!state?.playing) return;
+    if (state.idx >= state.cards.length) {
+        state.playing = false;
+        const btn = document.getElementById('btn-' + groupId);
+        btn.textContent = '▶ 顺序朗读';
+        btn.classList.remove('stop');
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        return;
+    }
+    const card = state.cards[state.idx++];
+    document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+    card.classList.add('playing');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    frSettings.speak(card.dataset.fr, () => setTimeout(() => speakNext(groupId), 400));
+}
+</script>
+</body>
+</html>

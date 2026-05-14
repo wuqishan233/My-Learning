@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语语法参考 — Grammaire</title>
+    <script src="settings.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { max-width: 960px; margin: 0 auto; padding: 20px 16px 80px; }
+        h1   { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+        /* Topic nav pills */
+        .nav-pills {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            justify-content: center; margin-bottom: 32px;
+        }
+        .nav-pill {
+            padding: 7px 16px; border-radius: 999px;
+            border: 2px solid var(--border); background: var(--card-bg);
+            color: var(--text); font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.15s;
+        }
+        .nav-pill:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* Section */
+        .grammar-section {
+            margin-bottom: 40px;
+            scroll-margin-top: 20px;
+        }
+        .section-header {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--primary); color: white;
+            border-radius: 12px 12px 0 0; padding: 14px 20px;
+            cursor: pointer; user-select: none;
+        }
+        .section-header h2 { font-size: 1.1rem; font-weight: 800; margin: 0; flex: 1; }
+        .section-header .toggle { font-size: 1.1rem; transition: transform 0.2s; }
+        .section-header.collapsed .toggle { transform: rotate(-90deg); }
+        .section-body {
+            background: var(--card-bg); border-radius: 0 0 12px 12px;
+            box-shadow: var(--shadow-sm); padding: 20px 20px 24px;
+            overflow: hidden; transition: max-height 0.3s ease;
+        }
+
+        /* Grammar table */
+        .g-table {
+            width: 100%; border-collapse: collapse; margin: 12px 0;
+            font-size: 0.88rem;
+        }
+        .g-table th {
+            background: var(--primary-light); color: var(--primary);
+            padding: 8px 12px; text-align: left; font-weight: 700;
+            border-bottom: 2px solid var(--primary);
+        }
+        .g-table td {
+            padding: 8px 12px; border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .g-table tr:last-child td { border-bottom: none; }
+        .g-table tr:hover td { background: var(--primary-light); }
+        .g-table .fr { font-weight: 700; color: var(--text-strong); cursor: pointer; }
+        .g-table .fr:hover { color: var(--primary); }
+        .g-table .ipa { color: var(--muted); font-family: monospace; font-size: 0.78rem; }
+        .g-table .cn { color: var(--text); }
+        .g-table .en { color: var(--muted); font-style: italic; font-size: 0.8rem; }
+        .g-table .ex { color: var(--muted); font-size: 0.82rem; }
+        .g-table .ex .fr-ex { color: var(--text-strong); font-style: italic; cursor: pointer; }
+        .g-table .ex .fr-ex:hover { color: var(--primary); }
+
+        /* Rule box */
+        .rule-box {
+            background: var(--primary-light); border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0; padding: 12px 16px;
+            margin: 14px 0; font-size: 0.88rem; line-height: 1.8;
+        }
+        .rule-box strong { color: var(--primary); }
+
+        /* Sub-title within section */
+        .sub-title {
+            font-size: 0.95rem; font-weight: 700; color: var(--primary);
+            margin: 20px 0 8px; border-bottom: 1px solid var(--border);
+            padding-bottom: 4px;
+        }
+
+        /* Pattern cards for negation / questions */
+        .pattern-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px; margin: 12px 0;
+        }
+        .pattern-card {
+            background: var(--bg); border-radius: 10px; padding: 12px 14px;
+            border: 2px solid var(--border); transition: border-color 0.15s;
+        }
+        .pattern-card:hover { border-color: var(--primary); }
+        .pattern-card .pf  { font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+        .pattern-card .pcn { font-size: 0.85rem; color: var(--text); margin-bottom: 4px; }
+        .pattern-card .pex { font-size: 0.78rem; color: var(--muted); font-style: italic; cursor: pointer; }
+        .pattern-card .pex:hover { color: var(--primary); }
+
+        /* Pronoun grid */
+        .pronoun-table {
+            width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem;
+        }
+        .pronoun-table th, .pronoun-table td {
+            border: 1px solid var(--border); padding: 8px 10px; text-align: center;
+        }
+        .pronoun-table th {
+            background: var(--primary-light); color: var(--primary); font-weight: 700;
+        }
+        .pronoun-table td:first-child { font-weight: 700; text-align: left; color: var(--muted); font-size: 0.78rem; }
+        .pronoun-table .fr-cell { font-weight: 700; color: var(--text-strong); cursor: pointer; }
+        .pronoun-table .fr-cell:hover { color: var(--primary); }
+
+        .note { font-size: 0.82rem; color: var(--muted); margin-top: 8px; line-height: 1.7; }
+    </style>
+</head>
+<body>
+    <div class="back"><a href="index.html">← 返回总目录</a></div>
+    <h1>📖 语法参考</h1>
+    <p class="subtitle">Grammaire Française — 点击法语词或例句即可朗读</p>
+
+    <!-- Nav -->
+    <div class="nav-pills">
+        <a class="nav-pill" href="#articles">🔵 冠词</a>
+        <a class="nav-pill" href="#prepositions">📍 介词</a>
+        <a class="nav-pill" href="#conjunctions">🔗 连词</a>
+        <a class="nav-pill" href="#pronouns">👤 代词</a>
+        <a class="nav-pill" href="#negation">🚫 否定</a>
+        <a class="nav-pill" href="#questions">❓ 疑问词</a>
+    </div>
+
+    <!-- ══════════════ 1. ARTICLES ══════════════ -->
+    <div class="grammar-section" id="articles">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>🔵</span>
+            <h2>冠词 Les Articles</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="rule-box">
+                <strong>核心规则：</strong>法语名词必须带冠词。冠词分三类：<strong>定冠词</strong>（特指）、<strong>不定冠词</strong>（泛指）、<strong>部分冠词</strong>（量的概念）。
+            </div>
+
+            <div class="sub-title">定冠词 Article défini — 特指已知事物</div>
+            <table class="g-table">
+                <tr><th>冠词</th><th>用法</th><th>IPA</th><th>例句</th></tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('le')">le</span></td>
+                    <td><span class="cn">阳性单数</span></td>
+                    <td class="ipa">/lə/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('le livre')">le livre</span> — 那本书</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('la')">la</span></td>
+                    <td><span class="cn">阴性单数</span></td>
+                    <td class="ipa">/la/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('la table')">la table</span> — 那张桌子</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp("l'")">l'</span></td>
+                    <td><span class="cn">元音前缩写</span></td>
+                    <td class="ipa">/l/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp(&quot;l'eau&quot;)">l'eau</span> — 那水</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('les')">les</span></td>
+                    <td><span class="cn">复数（阴阳性）</span></td>
+                    <td class="ipa">/le/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('les enfants')">les enfants</span> — 那些孩子们</td>
+                </tr>
+            </table>
+
+            <div class="sub-title">不定冠词 Article indéfini — 泛指任意一个</div>
+            <table class="g-table">
+                <tr><th>冠词</th><th>用法</th><th>IPA</th><th>例句</th></tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('un')">un</span></td>
+                    <td><span class="cn">阳性单数</span></td>
+                    <td class="ipa">/œ̃/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('un chat')">un chat</span> — 一只猫</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('une')">une</span></td>
+                    <td><span class="cn">阴性单数</span></td>
+                    <td class="ipa">/yn/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('une pomme')">une pomme</span> — 一个苹果</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('des')">des</span></td>
+                    <td><span class="cn">复数（阴阳性）</span></td>
+                    <td class="ipa">/de/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('des livres')">des livres</span> — 一些书</td>
+                </tr>
+            </table>
+
+            <div class="sub-title">部分冠词 Article partitif — 表示"一些/一点"</div>
+            <table class="g-table">
+                <tr><th>冠词</th><th>用法</th><th>IPA</th><th>例句</th></tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('du')">du</span></td>
+                    <td><span class="cn">阳性（de + le）</span></td>
+                    <td class="ipa">/dy/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('Je mange du pain.')">Je mange du pain.</span> — 我吃（一些）面包</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('de la')">de la</span></td>
+                    <td><span class="cn">阴性</span></td>
+                    <td class="ipa">/də la/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('Je bois de la eau.')">Je bois de l'eau.</span> — 我喝（一些）水</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('de l')">de l'</span></td>
+                    <td><span class="cn">元音前</span></td>
+                    <td class="ipa">/də l/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('de l eau')">de l'eau</span> — 一些水</td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('des')">des</span></td>
+                    <td><span class="cn">复数</span></td>
+                    <td class="ipa">/de/</td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('des légumes')">des légumes</span> — 一些蔬菜</td>
+                </tr>
+            </table>
+
+            <div class="rule-box">
+                <strong>否定句中冠词变 de：</strong><br>
+                Je mange <strong>du</strong> pain. → Je ne mange pas <strong>de</strong> pain.<br>
+                Il a <strong>une</strong> voiture. → Il n'a pas <strong>de</strong> voiture.
+            </div>
+
+            <div class="sub-title">缩合冠词（介词 + 定冠词）</div>
+            <table class="g-table">
+                <tr><th>组合</th><th>缩写</th><th>例句</th></tr>
+                <tr>
+                    <td><span class="cn">de + le</span></td>
+                    <td><span class="fr" onclick="sp('du')">du</span></td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('le livre du professeur')">le livre du professeur</span> — 老师的书</td>
+                </tr>
+                <tr>
+                    <td><span class="cn">de + les</span></td>
+                    <td><span class="fr" onclick="sp('des')">des</span></td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('le parc des enfants')">le parc des enfants</span> — 孩子们的公园</td>
+                </tr>
+                <tr>
+                    <td><span class="cn">à + le</span></td>
+                    <td><span class="fr" onclick="sp('au')">au</span></td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('Je vais au marché.')">Je vais au marché.</span> — 我去市场</td>
+                </tr>
+                <tr>
+                    <td><span class="cn">à + les</span></td>
+                    <td><span class="fr" onclick="sp('aux')">aux</span></td>
+                    <td class="ex"><span class="fr-ex" onclick="sp('Je parle aux enfants.')">Je parle aux enfants.</span> — 我和孩子们说话</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════ 2. PREPOSITIONS ══════════════ -->
+    <div class="grammar-section" id="prepositions">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>📍</span>
+            <h2>介词 Les Prépositions</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="sub-title">地点介词</div>
+            <table class="g-table">
+                <tr><th>介词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('à')">à</span></td><td class="cn">在…（城市/地点）</td><td class="ipa">/a/</td><td class="ex"><span class="fr-ex" onclick="sp('Je suis à Paris.')">Je suis à Paris.</span> — 我在巴黎</td></tr>
+                <tr><td><span class="fr" onclick="sp('en')">en</span></td><td class="cn">在…（国家/地区）</td><td class="ipa">/ɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('Je vis en France.')">Je vis en France.</span> — 我住在法国</td></tr>
+                <tr><td><span class="fr" onclick="sp('dans')">dans</span></td><td class="cn">在…里面</td><td class="ipa">/dɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('dans la maison')">dans la maison</span> — 在房子里</td></tr>
+                <tr><td><span class="fr" onclick="sp('sur')">sur</span></td><td class="cn">在…上面</td><td class="ipa">/syʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('sur la table')">sur la table</span> — 在桌子上</td></tr>
+                <tr><td><span class="fr" onclick="sp('sous')">sous</span></td><td class="cn">在…下面</td><td class="ipa">/su/</td><td class="ex"><span class="fr-ex" onclick="sp('sous le lit')">sous le lit</span> — 在床下面</td></tr>
+                <tr><td><span class="fr" onclick="sp('devant')">devant</span></td><td class="cn">在…前面</td><td class="ipa">/dəvɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('devant la porte')">devant la porte</span> — 在门前</td></tr>
+                <tr><td><span class="fr" onclick="sp('derrière')">derrière</span></td><td class="cn">在…后面</td><td class="ipa">/dɛʁjɛʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('derrière la maison')">derrière la maison</span> — 在房子后面</td></tr>
+                <tr><td><span class="fr" onclick="sp('entre')">entre</span></td><td class="cn">在…之间</td><td class="ipa">/ɑ̃tʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('entre toi et moi')">entre toi et moi</span> — 在你我之间</td></tr>
+                <tr><td><span class="fr" onclick="sp('près de')">près de</span></td><td class="cn">在…附近</td><td class="ipa">/pʁɛ də/</td><td class="ex"><span class="fr-ex" onclick="sp('près de la gare')">près de la gare</span> — 在车站附近</td></tr>
+                <tr><td><span class="fr" onclick="sp('loin de')">loin de</span></td><td class="cn">远离…</td><td class="ipa">/lwɛ̃ də/</td><td class="ex"><span class="fr-ex" onclick="sp('loin de chez moi')">loin de chez moi</span> — 离我家很远</td></tr>
+            </table>
+
+            <div class="sub-title">时间介词</div>
+            <table class="g-table">
+                <tr><th>介词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('à')">à</span></td><td class="cn">在…（时刻）</td><td class="ipa">/a/</td><td class="ex"><span class="fr-ex" onclick="sp('à huit heures')">à huit heures</span> — 在八点</td></tr>
+                <tr><td><span class="fr" onclick="sp('en')">en</span></td><td class="cn">在…（月份/年份）</td><td class="ipa">/ɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('en janvier, en 2024')">en janvier, en 2024</span> — 在一月、在2024年</td></tr>
+                <tr><td><span class="fr" onclick="sp('au')">au</span></td><td class="cn">在…（季节）</td><td class="ipa">/o/</td><td class="ex"><span class="fr-ex" onclick="sp('au printemps')">au printemps</span> — 在春天</td></tr>
+                <tr><td><span class="fr" onclick="sp('pendant')">pendant</span></td><td class="cn">在…期间</td><td class="ipa">/pɑ̃dɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('pendant les vacances')">pendant les vacances</span> — 在假期期间</td></tr>
+                <tr><td><span class="fr" onclick="sp('depuis')">depuis</span></td><td class="cn">自从…</td><td class="ipa">/dəpɥi/</td><td class="ex"><span class="fr-ex" onclick="sp('depuis trois ans')">depuis trois ans</span> — 三年以来</td></tr>
+                <tr><td><span class="fr" onclick="sp('dans')">dans</span></td><td class="cn">在…之后</td><td class="ipa">/dɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('dans cinq minutes')">dans cinq minutes</span> — 五分钟后</td></tr>
+                <tr><td><span class="fr" onclick="sp('avant')">avant</span></td><td class="cn">在…之前</td><td class="ipa">/avɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('avant le dîner')">avant le dîner</span> — 晚饭之前</td></tr>
+                <tr><td><span class="fr" onclick="sp('après')">après</span></td><td class="cn">在…之后</td><td class="ipa">/apʁɛ/</td><td class="ex"><span class="fr-ex" onclick="sp('après le cours')">après le cours</span> — 课后</td></tr>
+            </table>
+
+            <div class="sub-title">其他常用介词</div>
+            <table class="g-table">
+                <tr><th>介词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('de')">de</span></td><td class="cn">…的 / 从…</td><td class="ipa">/də/</td><td class="ex"><span class="fr-ex" onclick="sp('le livre de Marie')">le livre de Marie</span> — 玛丽的书</td></tr>
+                <tr><td><span class="fr" onclick="sp('pour')">pour</span></td><td class="cn">为了…</td><td class="ipa">/puʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('pour toi')">pour toi</span> — 为了你</td></tr>
+                <tr><td><span class="fr" onclick="sp('avec')">avec</span></td><td class="cn">和…一起</td><td class="ipa">/avɛk/</td><td class="ex"><span class="fr-ex" onclick="sp('avec mes amis')">avec mes amis</span> — 和朋友们一起</td></tr>
+                <tr><td><span class="fr" onclick="sp('sans')">sans</span></td><td class="cn">没有…</td><td class="ipa">/sɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('sans sucre')">sans sucre</span> — 不加糖</td></tr>
+                <tr><td><span class="fr" onclick="sp('par')">par</span></td><td class="cn">通过…/每…</td><td class="ipa">/paʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('par jour')">par jour</span> — 每天</td></tr>
+                <tr><td><span class="fr" onclick="sp('vers')">vers</span></td><td class="cn">朝向…/大约</td><td class="ipa">/vɛʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('vers la mer')">vers la mer</span> — 朝海边走</td></tr>
+                <tr><td><span class="fr" onclick="sp('chez')">chez</span></td><td class="cn">在…家/在…处</td><td class="ipa">/ʃe/</td><td class="ex"><span class="fr-ex" onclick="sp('chez moi')">chez moi</span> — 在我家</td></tr>
+                <tr><td><span class="fr" onclick="sp('malgré')">malgré</span></td><td class="cn">尽管…</td><td class="ipa">/malɡʁe/</td><td class="ex"><span class="fr-ex" onclick="sp('malgré la pluie')">malgré la pluie</span> — 尽管下雨</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════ 3. CONJUNCTIONS ══════════════ -->
+    <div class="grammar-section" id="conjunctions">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>🔗</span>
+            <h2>连词 Les Conjonctions</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="sub-title">并列连词 — 连接同等成分</div>
+            <table class="g-table">
+                <tr><th>连词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('et')">et</span></td><td class="cn">和、并且</td><td class="ipa">/e/</td><td class="ex"><span class="fr-ex" onclick="sp('du pain et du beurre')">du pain et du beurre</span> — 面包和黄油</td></tr>
+                <tr><td><span class="fr" onclick="sp('ou')">ou</span></td><td class="cn">或者</td><td class="ipa">/u/</td><td class="ex"><span class="fr-ex" onclick="sp('thé ou café')">thé ou café?</span> — 茶还是咖啡？</td></tr>
+                <tr><td><span class="fr" onclick="sp('mais')">mais</span></td><td class="cn">但是</td><td class="ipa">/mɛ/</td><td class="ex"><span class="fr-ex" onclick="sp('petit mais fort')">petit mais fort</span> — 个子小但很强壮</td></tr>
+                <tr><td><span class="fr" onclick="sp('donc')">donc</span></td><td class="cn">所以、因此</td><td class="ipa">/dɔ̃k/</td><td class="ex"><span class="fr-ex" onclick="sp('Je pense, donc je suis.')">Je pense, donc je suis.</span> — 我思故我在</td></tr>
+                <tr><td><span class="fr" onclick="sp('car')">car</span></td><td class="cn">因为（正式）</td><td class="ipa">/kaʁ/</td><td class="ex"><span class="fr-ex" onclick="sp("Il reste car il est fatigué.")">Il reste car il est fatigué.</span> — 他留下因为他累了</td></tr>
+                <tr><td><span class="fr" onclick="sp('ni')">ni…ni</span></td><td class="cn">既不…也不</td><td class="ipa">/ni/</td><td class="ex"><span class="fr-ex" onclick="sp('ni toi ni moi')">ni toi ni moi</span> — 你我都不</td></tr>
+                <tr><td><span class="fr" onclick="sp('or')">or</span></td><td class="cn">然而（转折）</td><td class="ipa">/ɔʁ/</td><td class="ex"><span class="fr-ex" onclick="sp('or, il était absent')">or, il était absent</span> — 然而他不在</td></tr>
+            </table>
+
+            <div class="sub-title">从属连词 — 引导从句</div>
+            <table class="g-table">
+                <tr><th>连词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('que')">que</span></td><td class="cn">（引导宾语从句）</td><td class="ipa">/kə/</td><td class="ex"><span class="fr-ex" onclick="sp('Je pense que tu as raison.')">Je pense que tu as raison.</span> — 我认为你是对的</td></tr>
+                <tr><td><span class="fr" onclick="sp('parce que')">parce que</span></td><td class="cn">因为</td><td class="ipa">/paʁsə kə/</td><td class="ex"><span class="fr-ex" onclick="sp('parce que je veux')">parce que je veux</span> — 因为我想要</td></tr>
+                <tr><td><span class="fr" onclick="sp('quand')">quand</span></td><td class="cn">当…的时候</td><td class="ipa">/kɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('quand il arrive')">quand il arrive</span> — 当他到达的时候</td></tr>
+                <tr><td><span class="fr" onclick="sp('si')">si</span></td><td class="cn">如果</td><td class="ipa">/si/</td><td class="ex"><span class="fr-ex" onclick="sp('si tu veux')">si tu veux</span> — 如果你想</td></tr>
+                <tr><td><span class="fr" onclick="sp('bien que')">bien que</span></td><td class="cn">尽管（+ 虚拟式）</td><td class="ipa">/bjɛ̃ kə/</td><td class="ex"><span class="fr-ex" onclick="sp('bien que ce soit difficile')">bien que ce soit difficile</span> — 尽管很难</td></tr>
+                <tr><td><span class="fr" onclick="sp('pendant que')">pendant que</span></td><td class="cn">在…期间</td><td class="ipa">/pɑ̃dɑ̃ kə/</td><td class="ex"><span class="fr-ex" onclick="sp('pendant que je dors')">pendant que je dors</span> — 在我睡觉期间</td></tr>
+                <tr><td><span class="fr" onclick="sp('avant que')">avant que</span></td><td class="cn">在…之前（+ 虚拟式）</td><td class="ipa">/avɑ̃ kə/</td><td class="ex"><span class="fr-ex" onclick="sp('avant que tu partes')">avant que tu partes</span> — 在你离开之前</td></tr>
+                <tr><td><span class="fr" onclick="sp('pour que')">pour que</span></td><td class="cn">为了（+ 虚拟式）</td><td class="ipa">/puʁ kə/</td><td class="ex"><span class="fr-ex" onclick="sp('pour que tu comprennes')">pour que tu comprennes</span> — 为了让你理解</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════ 4. PRONOUNS ══════════════ -->
+    <div class="grammar-section" id="pronouns">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>👤</span>
+            <h2>代词 Les Pronoms</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="sub-title">人称代词总览</div>
+            <table class="pronoun-table">
+                <tr>
+                    <th>人称</th>
+                    <th>主语<br><small>Sujet</small></th>
+                    <th>直接宾语<br><small>COD</small></th>
+                    <th>间接宾语<br><small>COI</small></th>
+                    <th>自反<br><small>Réfléchi</small></th>
+                    <th>重读<br><small>Tonique</small></th>
+                    <th>中文</th>
+                </tr>
+                <tr>
+                    <td>1sg</td>
+                    <td><span class="fr-cell" onclick="sp('je')">je</span></td>
+                    <td><span class="fr-cell" onclick="sp('me')">me</span></td>
+                    <td><span class="fr-cell" onclick="sp('me')">me</span></td>
+                    <td><span class="fr-cell" onclick="sp('me')">me</span></td>
+                    <td><span class="fr-cell" onclick="sp('moi')">moi</span></td>
+                    <td>我</td>
+                </tr>
+                <tr>
+                    <td>2sg</td>
+                    <td><span class="fr-cell" onclick="sp('tu')">tu</span></td>
+                    <td><span class="fr-cell" onclick="sp('te')">te</span></td>
+                    <td><span class="fr-cell" onclick="sp('te')">te</span></td>
+                    <td><span class="fr-cell" onclick="sp('te')">te</span></td>
+                    <td><span class="fr-cell" onclick="sp('toi')">toi</span></td>
+                    <td>你</td>
+                </tr>
+                <tr>
+                    <td>3sg m</td>
+                    <td><span class="fr-cell" onclick="sp('il')">il</span></td>
+                    <td><span class="fr-cell" onclick="sp('le')">le</span></td>
+                    <td><span class="fr-cell" onclick="sp('lui')">lui</span></td>
+                    <td><span class="fr-cell" onclick="sp('se')">se</span></td>
+                    <td><span class="fr-cell" onclick="sp('lui')">lui</span></td>
+                    <td>他</td>
+                </tr>
+                <tr>
+                    <td>3sg f</td>
+                    <td><span class="fr-cell" onclick="sp('elle')">elle</span></td>
+                    <td><span class="fr-cell" onclick="sp('la')">la</span></td>
+                    <td><span class="fr-cell" onclick="sp('lui')">lui</span></td>
+                    <td><span class="fr-cell" onclick="sp('se')">se</span></td>
+                    <td><span class="fr-cell" onclick="sp('elle')">elle</span></td>
+                    <td>她</td>
+                </tr>
+                <tr>
+                    <td>1pl</td>
+                    <td><span class="fr-cell" onclick="sp('nous')">nous</span></td>
+                    <td><span class="fr-cell" onclick="sp('nous')">nous</span></td>
+                    <td><span class="fr-cell" onclick="sp('nous')">nous</span></td>
+                    <td><span class="fr-cell" onclick="sp('nous')">nous</span></td>
+                    <td><span class="fr-cell" onclick="sp('nous')">nous</span></td>
+                    <td>我们</td>
+                </tr>
+                <tr>
+                    <td>2pl/敬</td>
+                    <td><span class="fr-cell" onclick="sp('vous')">vous</span></td>
+                    <td><span class="fr-cell" onclick="sp('vous')">vous</span></td>
+                    <td><span class="fr-cell" onclick="sp('vous')">vous</span></td>
+                    <td><span class="fr-cell" onclick="sp('vous')">vous</span></td>
+                    <td><span class="fr-cell" onclick="sp('vous')">vous</span></td>
+                    <td>你们/您</td>
+                </tr>
+                <tr>
+                    <td>3pl m</td>
+                    <td><span class="fr-cell" onclick="sp('ils')">ils</span></td>
+                    <td><span class="fr-cell" onclick="sp('les')">les</span></td>
+                    <td><span class="fr-cell" onclick="sp('leur')">leur</span></td>
+                    <td><span class="fr-cell" onclick="sp('se')">se</span></td>
+                    <td><span class="fr-cell" onclick="sp('eux')">eux</span></td>
+                    <td>他们</td>
+                </tr>
+                <tr>
+                    <td>3pl f</td>
+                    <td><span class="fr-cell" onclick="sp('elles')">elles</span></td>
+                    <td><span class="fr-cell" onclick="sp('les')">les</span></td>
+                    <td><span class="fr-cell" onclick="sp('leur')">leur</span></td>
+                    <td><span class="fr-cell" onclick="sp('se')">se</span></td>
+                    <td><span class="fr-cell" onclick="sp('elles')">elles</span></td>
+                    <td>她们</td>
+                </tr>
+            </table>
+
+            <div class="sub-title">副代词 y 和 en</div>
+            <table class="g-table">
+                <tr><th>代词</th><th>替代</th><th>例句</th></tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('y')">y</span></td>
+                    <td class="cn">替代地点（à + 地点）或 à + 名词</td>
+                    <td class="ex">
+                        <span class="fr-ex" onclick="sp('Tu vas à Paris? Oui, j y vais.')">Tu vas à Paris ? — Oui, j'y vais.</span><br>
+                        <span style="color:var(--muted);font-size:0.8rem">你去巴黎吗？——是的，我去。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="fr" onclick="sp('en')">en</span></td>
+                    <td class="cn">替代数量（de + 名词）</td>
+                    <td class="ex">
+                        <span class="fr-ex" onclick="sp('Tu as des pommes? Oui, j en ai.')">Tu as des pommes ? — Oui, j'en ai.</span><br>
+                        <span style="color:var(--muted);font-size:0.8rem">你有苹果吗？——是的，我有。</span>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="sub-title">代词语序（动词前）</div>
+            <div class="rule-box">
+                <strong>顺序：</strong>主语 + <strong>me/te/se/nous/vous</strong> → <strong>le/la/les</strong> → <strong>lui/leur</strong> → <strong>y</strong> → <strong>en</strong> + 动词<br>
+                例：Il <strong>me le</strong> donne. — 他把它给我。<br>
+                例：Elle <strong>lui en</strong> parle. — 她和他谈到这件事。
+            </div>
+
+            <div class="sub-title">指示代词</div>
+            <table class="g-table">
+                <tr><th>代词</th><th>中文</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('ce')">ce / c'</span></td><td class="cn">这/那（主语）</td><td class="ex"><span class="fr-ex" onclick="sp("C'est beau.")">C'est beau.</span> — 这很美</td></tr>
+                <tr><td><span class="fr" onclick="sp('celui')">celui / celle</span></td><td class="cn">这个/那个（替代名词）</td><td class="ex"><span class="fr-ex" onclick="sp('celui-ci')">celui-ci</span> 这个 / <span class="fr-ex" onclick="sp('celui-là')">celui-là</span> 那个</td></tr>
+                <tr><td><span class="fr" onclick="sp('ceux')">ceux / celles</span></td><td class="cn">这些/那些（复数）</td><td class="ex"><span class="fr-ex" onclick="sp('ceux qui travaillent')">ceux qui travaillent</span> — 那些工作的人</td></tr>
+                <tr><td><span class="fr" onclick="sp('ceci')">ceci / cela / ça</span></td><td class="cn">这/那（泛指）</td><td class="ex"><span class="fr-ex" onclick="sp('Ça va?')">Ça va ?</span> — 你好吗？</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════ 5. NEGATION ══════════════ -->
+    <div class="grammar-section" id="negation">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>🚫</span>
+            <h2>否定 La Négation</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="rule-box">
+                <strong>基本结构：</strong>主语 + <strong>ne</strong> + 动词 + <strong>pas</strong><br>
+                口语中 <em>ne</em> 常省略：Je sais pas. (= Je ne sais pas.)
+            </div>
+
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pf">ne … pas</div>
+                    <div class="pcn">不（基本否定）</div>
+                    <div class="pex" onclick="sp('Je ne sais pas.')">Je ne sais pas. — 我不知道</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … plus</div>
+                    <div class="pcn">不再…</div>
+                    <div class="pex" onclick="sp('Je ne fume plus.')">Je ne fume plus. — 我不再抽烟了</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … jamais</div>
+                    <div class="pcn">从不…</div>
+                    <div class="pex" onclick="sp('Il ne ment jamais.')">Il ne ment jamais. — 他从不撒谎</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … rien</div>
+                    <div class="pcn">什么都不…</div>
+                    <div class="pex" onclick="sp('Je ne vois rien.')">Je ne vois rien. — 我什么都看不见</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … personne</div>
+                    <div class="pcn">没有人…</div>
+                    <div class="pex" onclick="sp('Je ne connais personne.')">Je ne connais personne. — 我一个人都不认识</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … que</div>
+                    <div class="pcn">只…（限定）</div>
+                    <div class="pex" onclick="sp('Je ne bois que de l eau.')">Je ne bois que de l'eau. — 我只喝水</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … ni … ni</div>
+                    <div class="pcn">既不…也不…</div>
+                    <div class="pex" onclick="sp('Je ne mange ni viande ni poisson.')">Je ne mange ni viande ni poisson.</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pf">ne … nulle part</div>
+                    <div class="pcn">哪里都不去</div>
+                    <div class="pex" onclick="sp('Je ne vais nulle part.')">Je ne vais nulle part. — 我哪里都不去</div>
+                </div>
+            </div>
+
+            <div class="rule-box">
+                <strong>复合时态中的位置：</strong>ne + 助动词 + pas + 过去分词<br>
+                Je <strong>n'ai pas</strong> mangé. — 我没有吃。<br>
+                <strong>例外：</strong>personne / nulle part 放在过去分词<em>之后</em>：Je n'ai vu <strong>personne</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ 6. QUESTION WORDS ══════════════ -->
+    <div class="grammar-section" id="questions">
+        <div class="section-header" onclick="toggleSection(this)">
+            <span>❓</span>
+            <h2>疑问词 Les Mots Interrogatifs</h2>
+            <span class="toggle">▼</span>
+        </div>
+        <div class="section-body">
+            <div class="sub-title">基本疑问词</div>
+            <table class="g-table">
+                <tr><th>疑问词</th><th>中文</th><th>IPA</th><th>例句</th></tr>
+                <tr><td><span class="fr" onclick="sp('qui')">qui</span></td><td class="cn">谁</td><td class="ipa">/ki/</td><td class="ex"><span class="fr-ex" onclick="sp('Qui est là?')">Qui est là ?</span> — 谁在那里？</td></tr>
+                <tr><td><span class="fr" onclick="sp('que')">que / quoi</span></td><td class="cn">什么</td><td class="ipa">/kə/ /kwa/</td><td class="ex"><span class="fr-ex" onclick="sp('Que fais-tu?')">Que fais-tu ?</span> — 你在做什么？</td></tr>
+                <tr><td><span class="fr" onclick="sp('où')">où</span></td><td class="cn">在哪里</td><td class="ipa">/u/</td><td class="ex"><span class="fr-ex" onclick="sp('Où habites-tu?')">Où habites-tu ?</span> — 你住在哪里？</td></tr>
+                <tr><td><span class="fr" onclick="sp('quand')">quand</span></td><td class="cn">什么时候</td><td class="ipa">/kɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('Quand arrives-tu?')">Quand arrives-tu ?</span> — 你什么时候到？</td></tr>
+                <tr><td><span class="fr" onclick="sp('comment')">comment</span></td><td class="cn">怎么/如何</td><td class="ipa">/kɔmɑ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('Comment ça va?')">Comment ça va ?</span> — 你好吗？</td></tr>
+                <tr><td><span class="fr" onclick="sp('pourquoi')">pourquoi</span></td><td class="cn">为什么</td><td class="ipa">/puʁkwa/</td><td class="ex"><span class="fr-ex" onclick="sp('Pourquoi tu pleures?')">Pourquoi tu pleures ?</span> — 你为什么哭？</td></tr>
+                <tr><td><span class="fr" onclick="sp('combien')">combien</span></td><td class="cn">多少</td><td class="ipa">/kɔ̃bjɛ̃/</td><td class="ex"><span class="fr-ex" onclick="sp('Combien ça coûte?')">Combien ça coûte ?</span> — 多少钱？</td></tr>
+                <tr><td><span class="fr" onclick="sp('quel')">quel / quelle</span></td><td class="cn">哪个/什么（修饰名词）</td><td class="ipa">/kɛl/</td><td class="ex"><span class="fr-ex" onclick="sp('Quel jour sommes-nous?')">Quel jour sommes-nous ?</span> — 今天星期几？</td></tr>
+                <tr><td><span class="fr" onclick="sp('lequel')">lequel / laquelle</span></td><td class="cn">哪一个</td><td class="ipa">/ləkɛl/</td><td class="ex"><span class="fr-ex" onclick="sp('Lequel préfères-tu?')">Lequel préfères-tu ?</span> — 你更喜欢哪个？</td></tr>
+            </table>
+
+            <div class="sub-title">三种提问方式</div>
+            <div class="rule-box">
+                <strong>① 语调升高（口语）：</strong>Tu parles français <strong>?</strong><br>
+                <strong>② est-ce que（常用）：</strong><strong>Est-ce que</strong> tu parles français ?<br>
+                <strong>③ 倒装（正式/书面）：</strong>Parles-<strong>tu</strong> français ?<br>
+                <br>
+                <strong>第三人称倒装加 -t-：</strong>Parle-<strong>t</strong>-il français ?（避免两元音相连）
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function sp(text) { frSettings.speak(text); }
+
+    function toggleSection(header) {
+        header.classList.toggle('collapsed');
+        const body = header.nextElementSibling;
+        if (header.classList.contains('collapsed')) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+            requestAnimationFrame(() => { body.style.maxHeight = '0'; body.style.padding = '0 20px'; });
+        } else {
+            body.style.maxHeight = body.scrollHeight + 'px';
+            body.style.padding = '';
+            body.addEventListener('transitionend', () => { body.style.maxHeight = ''; }, { once: true });
+        }
+    }
+    </script>
+</body>
+</html>

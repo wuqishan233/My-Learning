@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语饮食词汇 — La Nourriture</title>
+    <script src="settings.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        body { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+        h1   { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--primary);
+            border-bottom: 2px solid var(--border); padding-bottom: 6px;
+            margin: 28px 0 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px 14px 12px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            text-align: center;
+            position: relative;
+        }
+        .card:hover  { box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .card.playing { background: var(--primary-light); border-color: var(--primary); }
+
+        /* Gender colour strip */
+        .masc { border-top: 4px solid #2196f3; }
+        .fem  { border-top: 4px solid #e91e8c; }
+
+        .card-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .card-fr   { font-size: 1rem; font-weight: 700; color: var(--text-strong); display: block; margin-bottom: 2px; }
+        .card-ipa  { font-size: 0.72rem; color: var(--muted); display: block; margin-bottom: 3px; font-family: monospace; }
+        .card-cn   { font-size: 0.88rem; color: var(--muted); display: block; margin-bottom: 4px; }
+        .card-note { font-size: 0.7rem; color: var(--primary); font-style: italic; }
+
+        .play-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%; border: none;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .play-btn:hover { background: var(--primary); color: white; }
+
+        /* Gender legend */
+        .legend {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            font-size: 0.78rem; margin-bottom: 16px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; color: var(--muted); font-weight: 600; }
+        .legend-dot  { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-m { background: #2196f3; }
+        .dot-f { background: #e91e8c; }
+
+        /* Read-all strip */
+        .read-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; justify-content: flex-end; }
+        .read-btn {
+            background: var(--primary); color: white;
+            border: none; border-radius: 999px;
+            padding: 6px 16px; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: filter 0.15s;
+        }
+        .read-btn:hover { filter: brightness(0.88); }
+        .read-btn.stop { background: #e04040; }
+
+        /* Grammar note */
+        .note-box {
+            background: var(--primary-light); border-radius: 12px;
+            padding: 14px 18px; margin-top: 20px;
+            font-size: 0.88rem; line-height: 1.8; color: var(--text);
+        }
+        .note-box strong { color: var(--primary); }
+        .note-box ul { margin: 6px 0 0 16px; padding: 0; }
+
+        /* Meal timeline */
+        .meal-timeline {
+            display: flex; gap: 0; flex-wrap: wrap;
+            background: var(--card-bg); border-radius: 12px;
+            box-shadow: var(--shadow-sm); overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .meal-slot {
+            flex: 1; min-width: 120px;
+            padding: 14px 12px; text-align: center;
+            border-right: 1px solid var(--border);
+            cursor: pointer; transition: background 0.15s;
+        }
+        .meal-slot:last-child { border-right: none; }
+        .meal-slot:hover { background: var(--primary-light); }
+        .meal-slot .time { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
+        .meal-slot .name { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+        .meal-slot .cn   { font-size: 0.8rem; color: var(--muted); }
+        .meal-slot .icon { font-size: 1.5rem; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <div class="back"><a href="index.html">← 返回总目录</a></div>
+    <h1>🍽️ 饮食</h1>
+    <p class="subtitle">La Nourriture et les Boissons — 点击卡片朗读，蓝色 = 阳性，粉色 = 阴性</p>
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot dot-m"></div>阳性 masculin</div>
+        <div class="legend-item"><div class="legend-dot dot-f"></div>阴性 féminin</div>
+    </div>
+
+    <!-- Meal timeline -->
+    <div class="meal-timeline">
+        <div class="meal-slot" onclick="frSettings.speak('le petit-déjeuner')">
+            <div class="icon">☀️</div>
+            <div class="time">6 h – 9 h</div>
+            <div class="name">le petit-déjeuner</div>
+            <div class="cn">早餐</div>
+        </div>
+        <div class="meal-slot" onclick="frSettings.speak('le déjeuner')">
+            <div class="icon">🌤️</div>
+            <div class="time">12 h – 14 h</div>
+            <div class="name">le déjeuner</div>
+            <div class="cn">午餐</div>
+        </div>
+        <div class="meal-slot" onclick="frSettings.speak('le goûter')">
+            <div class="icon">🍪</div>
+            <div class="time">16 h – 17 h</div>
+            <div class="name">le goûter</div>
+            <div class="cn">下午茶（儿童）</div>
+        </div>
+        <div class="meal-slot" onclick="frSettings.speak('le dîner')">
+            <div class="icon">🌙</div>
+            <div class="time">19 h – 21 h</div>
+            <div class="name">le dîner</div>
+            <div class="cn">晚餐</div>
+        </div>
+    </div>
+
+    <!-- ══════════════ 主食与谷物 ══════════════ -->
+    <div class="section-title">
+        🍞 主食与谷物
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('staples', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="staples"></div>
+
+    <!-- ══════════════ 蔬菜 ══════════════ -->
+    <div class="section-title">
+        🥦 蔬菜 Les Légumes
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('vegetables', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="vegetables"></div>
+
+    <!-- ══════════════ 水果 ══════════════ -->
+    <div class="section-title">
+        🍎 水果 Les Fruits
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('fruits', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="fruits"></div>
+
+    <!-- ══════════════ 肉类与蛋白质 ══════════════ -->
+    <div class="section-title">
+        🥩 肉类与蛋白质
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('proteins', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="proteins"></div>
+
+    <!-- ══════════════ 乳制品 ══════════════ -->
+    <div class="section-title">
+        🧀 乳制品 Les Produits Laitiers
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('dairy', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="dairy"></div>
+
+    <!-- ══════════════ 饮料 ══════════════ -->
+    <div class="section-title">
+        ☕ 饮料 Les Boissons
+        <div class="read-bar" style="margin:0 0 0 auto;">
+            <button class="read-btn" onclick="readSection('drinks', this)">顺序朗读</button>
+        </div>
+    </div>
+    <div class="grid" id="drinks"></div>
+
+    <!-- Grammar note -->
+    <div class="note-box">
+        <strong>📝 语法提示</strong>
+        <ul>
+            <li><strong>用餐时不用冠词：</strong>Je mange du pain. 我吃面包（du = de + le，部分冠词）</li>
+            <li><strong>否定句中用 de：</strong>Je ne mange pas de viande. 我不吃肉</li>
+            <li><strong>J'ai faim</strong>（我饿了） / <strong>J'ai soif</strong>（我渴了）— 注意不用 je suis</li>
+            <li><strong>点餐用语：</strong>Je voudrais… / Je prends… / L'addition, s'il vous plaît.</li>
+        </ul>
+    </div>
+
+    <script>
+    const DATA = {
+        staples: [
+            { fr:'le pain',         cn:'面包',         ipa:'/lə pɛ̃/',       icon:'🍞', g:'m' },
+            { fr:'le riz',          cn:'米饭',         ipa:'/lə ʁi/',        icon:'🍚', g:'m' },
+            { fr:'les pâtes',       cn:'面食/意面',    ipa:'/le pɑt/',       icon:'🍝', g:'f', note:'复数' },
+            { fr:'la baguette',     cn:'法棍面包',     ipa:'/la baɡɛt/',     icon:'🥖', g:'f' },
+            { fr:'le croissant',    cn:'羊角面包',     ipa:'/lə kʁwasɑ̃/',  icon:'🥐', g:'m' },
+            { fr:"l'œuf",          cn:'鸡蛋',         ipa:'/lœf/',          icon:'🥚', g:'m', note:'复数: les œufs' },
+            { fr:'la soupe',        cn:'汤',           ipa:'/la sup/',       icon:'🍲', g:'f' },
+            { fr:'la salade',       cn:'沙拉',         ipa:'/la salad/',     icon:'🥗', g:'f' },
+        ],
+        vegetables: [
+            { fr:'la tomate',       cn:'番茄',         ipa:'/la tɔmat/',     icon:'🍅', g:'f' },
+            { fr:'la carotte',      cn:'胡萝卜',       ipa:'/la kaʁɔt/',    icon:'🥕', g:'f' },
+            { fr:'la pomme de terre', cn:'土豆',       ipa:'/la pɔm də tɛʁ/', icon:'🥔', g:'f' },
+            { fr:"l'oignon",       cn:'洋葱',         ipa:'/lɔɲɔ̃/',       icon:'🧅', g:'m' },
+            { fr:"l'ail",          cn:'大蒜',         ipa:'/laj/',          icon:'🧄', g:'m' },
+            { fr:'le champignon',   cn:'蘑菇',         ipa:'/lə ʃɑ̃piɲɔ̃/', icon:'🍄', g:'m' },
+            { fr:'le concombre',    cn:'黄瓜',         ipa:'/lə kɔ̃kɔ̃bʁ/', icon:'🥒', g:'m' },
+            { fr:'le poivron',      cn:'甜椒',         ipa:'/lə pwavʁɔ̃/',  icon:'🫑', g:'m' },
+            { fr:'les épinards',    cn:'菠菜',         ipa:'/le zepenaʁ/',  icon:'🥬', g:'m', note:'复数' },
+            { fr:'le haricot vert', cn:'四季豆',       ipa:'/lə aʁiko vɛʁ/', icon:'🫘', g:'m' },
+        ],
+        fruits: [
+            { fr:'la pomme',        cn:'苹果',         ipa:'/la pɔm/',       icon:'🍎', g:'f' },
+            { fr:'la poire',        cn:'梨',           ipa:'/la pwaʁ/',      icon:'🍐', g:'f' },
+            { fr:'la banane',       cn:'香蕉',         ipa:'/la banan/',     icon:'🍌', g:'f' },
+            { fr:"l'orange",       cn:'橙子',         ipa:'/lɔʁɑ̃ʒ/',     icon:'🍊', g:'f' },
+            { fr:'le citron',       cn:'柠檬',         ipa:'/lə sitʁɔ̃/',   icon:'🍋', g:'m' },
+            { fr:'la fraise',       cn:'草莓',         ipa:'/la fʁɛz/',     icon:'🍓', g:'f' },
+            { fr:'le raisin',       cn:'葡萄',         ipa:'/lə ʁɛzɛ̃/',   icon:'🍇', g:'m' },
+            { fr:'la cerise',       cn:'樱桃',         ipa:'/la səʁiz/',    icon:'🍒', g:'f' },
+            { fr:'la pêche',        cn:'桃子',         ipa:'/la pɛʃ/',      icon:'🍑', g:'f' },
+            { fr:"l'ananas",       cn:'菠萝',         ipa:'/lananɑ(s)/',   icon:'🍍', g:'m' },
+        ],
+        proteins: [
+            { fr:'la viande',       cn:'肉（总称）',   ipa:'/la vjɑ̃d/',    icon:'🥩', g:'f' },
+            { fr:'le bœuf',        cn:'牛肉',         ipa:'/lə bœf/',      icon:'🐄', g:'m' },
+            { fr:'le poulet',       cn:'鸡肉',         ipa:'/lə pulɛ/',     icon:'🍗', g:'m' },
+            { fr:'le porc',         cn:'猪肉',         ipa:'/lə pɔʁk/',    icon:'🐷', g:'m' },
+            { fr:'le poisson',      cn:'鱼',           ipa:'/lə pwasɔ̃/',   icon:'🐟', g:'m' },
+            { fr:'les crevettes',   cn:'虾',           ipa:'/le kʁəvɛt/',   icon:'🦐', g:'f', note:'复数' },
+            { fr:'le jambon',       cn:'火腿',         ipa:'/lə ʒɑ̃bɔ̃/',  icon:'🥓', g:'m' },
+            { fr:'le saucisson',    cn:'香肠',         ipa:'/lə sosisɔ̃/',  icon:'🌭', g:'m' },
+        ],
+        dairy: [
+            { fr:'le lait',         cn:'牛奶',         ipa:'/lə lɛ/',       icon:'🥛', g:'m' },
+            { fr:'le fromage',      cn:'奶酪',         ipa:'/lə fʁɔmaʒ/',  icon:'🧀', g:'m' },
+            { fr:'le beurre',       cn:'黄油',         ipa:'/lə bœʁ/',     icon:'🧈', g:'m' },
+            { fr:'la crème',        cn:'奶油/乳脂',    ipa:'/la kʁɛm/',    icon:'🍦', g:'f' },
+            { fr:'le yaourt',       cn:'酸奶',         ipa:'/lə jauʁt/',   icon:'🫙', g:'m' },
+        ],
+        drinks: [
+            { fr:"l'eau",          cn:'水',           ipa:'/lo/',          icon:'💧', g:'f' },
+            { fr:'le café',         cn:'咖啡',         ipa:'/lə kafe/',     icon:'☕', g:'m' },
+            { fr:'le thé',          cn:'茶',           ipa:'/lə te/',       icon:'🍵', g:'m' },
+            { fr:'le jus',          cn:'果汁',         ipa:'/lə ʒy/',       icon:'🥤', g:'m' },
+            { fr:'le vin',          cn:'葡萄酒',       ipa:'/lə vɛ̃/',      icon:'🍷', g:'m' },
+            { fr:'la bière',        cn:'啤酒',         ipa:'/la bjɛʁ/',    icon:'🍺', g:'f' },
+            { fr:'le lait',         cn:'牛奶',         ipa:'/lə lɛ/',       icon:'🥛', g:'m' },
+            { fr:'le chocolat chaud', cn:'热巧克力',   ipa:'/lə ʃɔkɔla ʃo/', icon:'🍫', g:'m' },
+        ]
+    };
+
+    let readTimer = null;
+    let readStopped = false;
+
+    function makeCard(item) {
+        const card = document.createElement('div');
+        card.className = 'card ' + (item.g === 'm' ? 'masc' : 'fem');
+        card.dataset.fr = item.fr;
+        card.onclick = function() { playCard(this); };
+        const noteHtml = item.note ? `<span class="card-note">${item.note}</span>` : '';
+        card.innerHTML = `
+            <span class="card-icon">${item.icon}</span>
+            <span class="card-fr">${item.fr}</span>
+            <span class="card-ipa">${item.ipa}</span>
+            <span class="card-cn">${item.cn}</span>
+            ${noteHtml}
+            <button class="play-btn" onclick="event.stopPropagation();playCard(this.parentElement)">▶</button>
+        `;
+        return card;
+    }
+
+    function playCard(card) {
+        document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+        card.classList.add('playing');
+        frSettings.speak(card.dataset.fr, () => card.classList.remove('playing'));
+    }
+
+    function readSection(sectionId, btn) {
+        if (btn.classList.contains('stop')) {
+            readStopped = true;
+            clearTimeout(readTimer);
+            btn.textContent = '顺序朗读';
+            btn.classList.remove('stop');
+            document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+            return;
+        }
+        const items = DATA[sectionId];
+        let i = 0;
+        readStopped = false;
+        btn.textContent = '停止';
+        btn.classList.add('stop');
+
+        function next() {
+            if (readStopped || i >= items.length) {
+                btn.textContent = '顺序朗读';
+                btn.classList.remove('stop');
+                document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+                return;
+            }
+            const cards = document.querySelectorAll(`#${sectionId} .card`);
+            cards.forEach(c => c.classList.remove('playing'));
+            if (cards[i]) cards[i].classList.add('playing');
+            frSettings.speak(items[i].fr, () => { i++; readTimer = setTimeout(next, 300); });
+        }
+        next();
+    }
+
+    // Render all sections
+    Object.keys(DATA).forEach(sectionId => {
+        const container = document.getElementById(sectionId);
+        DATA[sectionId].forEach(item => container.appendChild(makeCard(item)));
+    });
+    </script>
+</body>
+</html>

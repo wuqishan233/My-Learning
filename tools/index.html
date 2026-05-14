@@ -11,7 +11,7 @@
         header { text-align: center; margin-bottom: 40px; }
         header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
         header p { color: var(--muted); font-size: 1rem; }
-        .section { max-width: 820px; margin: 0 auto 36px; }
+        .section { max-width: 1100px; margin: 0 auto 36px; }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -26,9 +26,9 @@
         <p>交互式朗读 · 按主题分类 · 点击即可发音</p>
     </header>
 
-    <!-- 动词 -->
+    <!-- 词汇与动词 -->
     <div class="section">
-        <div class="section-label">📝 动词练习 Verbes</div>
+        <div class="section-label">📚 词汇与动词 Vocabulaire &amp; Verbes</div>
         <div class="grid">
             <a class="level-card" href="a1-index.html">
                 <div class="badge">DELF A1</div>
@@ -46,13 +46,6 @@
                     <span>50 动词</span><span>10 组</span><span>300 例句</span>
                 </div>
             </a>
-        </div>
-    </div>
-
-    <!-- 词汇 -->
-    <div class="section">
-        <div class="section-label">📚 词汇 Vocabulaire</div>
-        <div class="grid">
             <a class="level-card" href="Corps.html">
                 <div class="badge">词汇</div>
                 <h2>身体部位</h2>
@@ -61,15 +54,40 @@
                     <span>28 词汇</span><span>互动图示</span><span>IPA 注音</span>
                 </div>
             </a>
-        </div>
-    </div>
-
-    <!-- 数字 -->
-    <div class="section">
-        <div class="section-label">🔢 数字 Nombres</div>
-        <div class="grid">
+            <a class="level-card" href="Temps.html">
+                <div class="badge">词汇</div>
+                <h2>时间词汇</h2>
+                <p>Le Temps — 7 天星期 · 12 个月份 · 4 个季节 · 12 个常用时间词，含语法用法说明。</p>
+                <div class="meta">
+                    <span>35 词汇</span><span>顺序朗读</span><span>语法笔记</span>
+                </div>
+            </a>
+            <a class="level-card" href="Famille.html">
+                <div class="badge">词汇</div>
+                <h2>家庭成员</h2>
+                <p>La Famille — 直系亲属、祖父母、叔舅姑姨、姻亲，含互动家庭树，蓝/粉色区分阴阳性。</p>
+                <div class="meta">
+                    <span>32 词汇</span><span>家庭树</span><span>阴阳性配对</span>
+                </div>
+            </a>
+            <a class="level-card" href="Couleurs.html">
+                <div class="badge">词汇</div>
+                <h2>颜色</h2>
+                <p>Les Couleurs — 12 种基础色 + 深浅变体 + 描述形容词，含色块预览与阴阳性变化规则。</p>
+                <div class="meta">
+                    <span>25 词汇</span><span>色块预览</span><span>语法笔记</span>
+                </div>
+            </a>
+            <a class="level-card" href="Nourriture.html">
+                <div class="badge">词汇</div>
+                <h2>饮食</h2>
+                <p>La Nourriture — 主食·蔬菜·水果·肉类·乳制品·饮料，含三餐时间轴与用餐语法要点。</p>
+                <div class="meta">
+                    <span>51 词汇</span><span>三餐时间轴</span><span>语法笔记</span>
+                </div>
+            </a>
             <a class="level-card" href="Nombre.html">
-                <div class="badge">数字</div>
+                <div class="badge">词汇</div>
                 <h2>数字 0–100</h2>
                 <p>Nombres de 0 à 100 — 点击单词朗读，或一键顺序朗读全部数字。</p>
                 <div class="meta">
@@ -79,10 +97,34 @@
         </div>
     </div>
 
-    <!-- 工具 -->
+    <!-- 练习 & 工具 -->
     <div class="section">
-        <div class="section-label">🛠 工具 Outils</div>
+        <div class="section-label">🃏 练习与工具 Exercices &amp; Outils</div>
         <div class="grid">
+            <a class="level-card" href="quiz.html">
+                <div class="badge">测验</div>
+                <h2>单词卡测验</h2>
+                <p>Flashcard Quiz — 法→中 / 中→法 两种模式，自选范围，✅/❌ 即时反馈，结束后专练错题。</p>
+                <div class="meta">
+                    <span>5000 词汇</span><span>翻转卡片</span><span>错题复练</span>
+                </div>
+            </a>
+            <a class="level-card" href="grammaire.html">
+                <div class="badge">语法</div>
+                <h2>语法参考</h2>
+                <p>Grammaire — 冠词·介词·连词·代词·否定·疑问词，含完整规则表格与可朗读例句。</p>
+                <div class="meta">
+                    <span>6 专题</span><span>点击朗读</span><span>可折叠</span>
+                </div>
+            </a>
+            <a class="level-card" href="conjugation.html">
+                <div class="badge">动词</div>
+                <h2>动词变位表</h2>
+                <p>Conjugaison — 47 个不规则动词，10 种时态，含IPA注音，点击任意变位形式即可朗读。</p>
+                <div class="meta">
+                    <span>47 动词</span><span>10 时态</span><span>复合过去时</span>
+                </div>
+            </a>
             <a class="level-card" href="french-reader.html">
                 <div class="badge">工具</div>
                 <h2>法语朗读器</h2>
