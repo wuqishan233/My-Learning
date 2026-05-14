@@ -6,7 +6,7 @@
     <title>French Text Reader</title>
     <style>
         :root {
-            color-scheme: light;
+            color-scheme: light dark;
             --bg-top: #fff8ec;
             --bg-bottom: #dcecff;
             --panel: rgba(255, 255, 255, 0.84);
@@ -17,6 +17,72 @@
             --primary-strong: #07594f;
             --secondary: #f08b45;
             --shadow: 0 24px 70px rgba(20, 34, 53, 0.12);
+            --bg-glow-warm: rgba(240, 139, 69, 0.35);
+            --bg-glow-cool: rgba(10, 122, 109, 0.2);
+            --hero-start: rgba(10, 122, 109, 0.12);
+            --hero-end: rgba(240, 139, 69, 0.18);
+            --hero-border: rgba(20, 34, 53, 0.08);
+            --eyebrow-bg: rgba(255, 255, 255, 0.65);
+            --field-border: rgba(20, 34, 53, 0.14);
+            --field-bg: rgba(255, 255, 255, 0.9);
+            --focus-outline: rgba(10, 122, 109, 0.22);
+            --focus-border: rgba(10, 122, 109, 0.36);
+            --primary-accent: #139a8a;
+            --primary-shadow: rgba(10, 122, 109, 0.24);
+            --secondary-bg: rgba(20, 34, 53, 0.08);
+            --preview-border: rgba(20, 34, 53, 0.1);
+            --preview-bg: rgba(255, 255, 255, 0.72);
+            --sentence-active-bg: rgba(240, 139, 69, 0.26);
+            --sentence-active-text: #7a3f13;
+            --sentence-active-ring: rgba(240, 139, 69, 0.22);
+            --word-hover: rgba(10, 122, 109, 0.15);
+            --word-active-bg: rgba(10, 122, 109, 0.28);
+            --tooltip-bg: #142235;
+            --tooltip-text: #fff;
+            --tooltip-fr: #a8d8d2;
+            --tooltip-loading: #8ba7bb;
+            --tooltip-shadow: 0 8px 24px rgba(20,34,53,0.22);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: dark;
+                --bg-top: #1a1210;
+                --bg-bottom: #0d1a2e;
+                --panel: rgba(30, 32, 36, 0.92);
+                --panel-border: rgba(255,255,255,0.08);
+                --text: #e8eaed;
+                --muted: #9aa0a6;
+                --primary: #1ab09b;
+                --primary-strong: #12897a;
+                --secondary: #f0a060;
+                --shadow: 0 24px 70px rgba(0,0,0,0.5);
+                --bg-glow-warm: rgba(240, 160, 96, 0.18);
+                --bg-glow-cool: rgba(26, 176, 155, 0.16);
+                --hero-start: rgba(26, 176, 155, 0.14);
+                --hero-end: rgba(240, 160, 96, 0.12);
+                --hero-border: rgba(255,255,255,0.08);
+                --eyebrow-bg: rgba(255, 255, 255, 0.08);
+                --field-border: rgba(255,255,255,0.14);
+                --field-bg: rgba(17, 19, 23, 0.82);
+                --focus-outline: rgba(26, 176, 155, 0.28);
+                --focus-border: rgba(26, 176, 155, 0.4);
+                --primary-accent: #12897a;
+                --primary-shadow: rgba(26, 176, 155, 0.22);
+                --secondary-bg: rgba(255,255,255,0.08);
+                --preview-border: rgba(255,255,255,0.1);
+                --preview-bg: rgba(255,255,255,0.05);
+                --sentence-active-bg: rgba(240, 160, 96, 0.22);
+                --sentence-active-text: #ffd7b5;
+                --sentence-active-ring: rgba(240, 160, 96, 0.24);
+                --word-hover: rgba(26, 176, 155, 0.18);
+                --word-active-bg: rgba(26, 176, 155, 0.28);
+                --tooltip-bg: #0f1115;
+                --tooltip-text: #e8eaed;
+                --tooltip-fr: #8be3d3;
+                --tooltip-loading: #9aa0a6;
+                --tooltip-shadow: 0 8px 24px rgba(0,0,0,0.45);
+            }
         }
 
         * {
@@ -29,8 +95,8 @@
             font-family: "Trebuchet MS", "Segoe UI", sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(240, 139, 69, 0.35), transparent 36%),
-                radial-gradient(circle at top right, rgba(10, 122, 109, 0.2), transparent 28%),
+                radial-gradient(circle at top left, var(--bg-glow-warm), transparent 36%),
+                radial-gradient(circle at top right, var(--bg-glow-cool), transparent 28%),
                 linear-gradient(160deg, var(--bg-top), var(--bg-bottom));
             display: flex;
             align-items: center;
@@ -46,40 +112,6 @@
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
             overflow: hidden;
-        }
-
-        .hero {
-            padding: 28px 28px 20px;
-            background:
-                linear-gradient(135deg, rgba(10, 122, 109, 0.12), rgba(240, 139, 69, 0.18));
-            border-bottom: 1px solid rgba(20, 34, 53, 0.08);
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.65);
-            color: var(--primary-strong);
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-        }
-
-        h1 {
-            margin: 16px 0 10px;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            line-height: 0.95;
-        }
-
-        .hero p {
-            margin: 0;
-            max-width: 60ch;
-            color: var(--muted);
-            font-size: 1.02rem;
-            line-height: 1.6;
         }
 
         .content {
@@ -114,9 +146,9 @@
         select,
         textarea {
             width: 100%;
-            border: 1px solid rgba(20, 34, 53, 0.14);
+            border: 1px solid var(--field-border);
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--field-bg);
             color: var(--text);
         }
 
@@ -134,8 +166,8 @@
 
         textarea:focus,
         select:focus {
-            outline: 2px solid rgba(10, 122, 109, 0.22);
-            border-color: rgba(10, 122, 109, 0.36);
+            outline: 2px solid var(--focus-outline);
+            border-color: var(--focus-border);
         }
 
         .actions {
@@ -159,14 +191,14 @@
         }
 
         .primary-btn {
-            background: linear-gradient(135deg, var(--primary), #139a8a);
+            background: linear-gradient(135deg, var(--primary), var(--primary-accent));
             color: #fff;
-            box-shadow: 0 12px 28px rgba(10, 122, 109, 0.24);
+            box-shadow: 0 12px 28px var(--primary-shadow);
             font-weight: 700;
         }
 
         .secondary-btn {
-            background: rgba(20, 34, 53, 0.08);
+            background: var(--secondary-bg);
             color: var(--text);
             font-weight: 700;
         }
@@ -186,13 +218,26 @@
         .preview {
             margin-top: 18px;
             padding: 18px;
-            border: 1px solid rgba(20, 34, 53, 0.1);
+            border: 1px solid var(--preview-border);
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.72);
+            background: var(--preview-bg);
         }
 
-        .preview-title {
-            margin: 0 0 12px;
+        .translation {
+            margin-top: 14px;
+            padding: 18px;
+            border: 1px solid var(--preview-border);
+            border-radius: 20px;
+            background: var(--preview-bg);
+        }
+
+        .translation-text {
+            margin: 0;
+            line-height: 1.9;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            color: var(--muted);
+        }
             font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.02em;
@@ -214,9 +259,9 @@
         }
 
         .sentence.active {
-            background: rgba(240, 139, 69, 0.26);
-            color: #7a3f13;
-            box-shadow: 0 0 0 1px rgba(240, 139, 69, 0.22);
+            background: var(--sentence-active-bg);
+            color: var(--sentence-active-text);
+            box-shadow: 0 0 0 1px var(--sentence-active-ring);
         }
 
         .word {
@@ -227,25 +272,25 @@
         }
 
         .word:hover {
-            background: rgba(10, 122, 109, 0.15);
+            background: var(--word-hover);
         }
 
         .word.speaking {
-            background: rgba(10, 122, 109, 0.28);
+            background: var(--word-active-bg);
             color: var(--primary-strong);
         }
 
         .word-tooltip {
             position: fixed;
             z-index: 9999;
-            background: #142235;
-            color: #fff;
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
             border-radius: 10px;
             padding: 7px 12px;
             font-size: 0.92rem;
             line-height: 1.5;
             max-width: 220px;
-            box-shadow: 0 8px 24px rgba(20,34,53,0.22);
+            box-shadow: var(--tooltip-shadow);
             pointer-events: none;
             opacity: 0;
             transform: translateY(4px);
@@ -259,7 +304,7 @@
 
         .word-tooltip .tip-fr {
             font-weight: 700;
-            color: #a8d8d2;
+            color: var(--tooltip-fr);
             font-size: 0.82rem;
             display: block;
             margin-bottom: 2px;
@@ -270,7 +315,7 @@
         }
 
         .word-tooltip .tip-loading {
-            color: #8ba7bb;
+            color: var(--tooltip-loading);
             font-style: italic;
         }
 
@@ -311,12 +356,6 @@
 </head>
 <body>
     <main class="page">
-        <section class="hero">
-            <div class="eyebrow">French practice reader</div>
-            <h1>Paste French text. Read it aloud.</h1>
-            <p>Use this page to drop in any French paragraph, article, or dialogue and play it with your browser's speech engine.</p>
-        </section>
-
         <section class="content">
             <div class="controls">
                 <div class="field">
@@ -356,8 +395,14 @@
                 <p class="preview-text" id="previewText"></p>
             </section>
 
+            <section class="translation" id="translationSection" hidden>
+                <p class="preview-title">Translation</p>
+                <p class="translation-text" id="translationText"></p>
+            </section>
+
             <div class="actions">
                 <button class="primary-btn" id="readBtn" type="button">Read aloud</button>
+                <button class="secondary-btn" id="translateBtn" type="button">Translate</button>
                 <button class="secondary-btn" id="stopBtn" type="button">Stop</button>
                 <div class="status" id="status">Ready.</div>
             </div>
@@ -615,6 +660,33 @@
             }
         });
 
+        const translateBtn = document.getElementById('translateBtn');
+        const translationSection = document.getElementById('translationSection');
+        const translationText = document.getElementById('translationText');
+
+        function translateAll() {
+            const text = frenchText.value.trim();
+            if (!text) { setStatus('Paste some French text first.'); return; }
+            const lang = translateLang.value;
+            translationText.textContent = '…';
+            translationSection.hidden = false;
+            fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=fr&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`)
+                .then(r => r.json())
+                .then(data => {
+                    translationText.textContent =
+                        data?.[0]?.map(part => part?.[0]).filter(Boolean).join('') || '—';
+                })
+                .catch(() => { translationText.textContent = 'Translation unavailable.'; });
+        }
+
+        translateBtn.addEventListener('click', translateAll);
+
+        // Clear translation when text changes
+        frenchText.addEventListener('input', () => {
+            translationSection.hidden = true;
+            renderPreview();
+        });
+
         readBtn.addEventListener('click', readText);
 
         stopBtn.addEventListener('click', () => {
@@ -625,10 +697,6 @@
             if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
                 readText();
             }
-        });
-
-        frenchText.addEventListener('input', () => {
-            renderPreview();
         });
 
         loadVoices();

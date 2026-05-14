@@ -4,30 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🇫🇷 法语 A2 核心动词 — 首页</title>
+    <link rel="stylesheet" href="theme.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f2f5;
-            color: #1c1e21;
-            min-height: 100vh;
-            padding: 24px 16px 48px;
-        }
-        .back { text-align: center; margin-bottom: 16px; }
-        .back a { color: #1877f2; text-decoration: none; font-size: 0.9rem; }
+        body { padding: 24px 16px 48px; }
         header { text-align: center; margin-bottom: 32px; }
         header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
-        header p { color: #65676b; font-size: 1rem; }
-        .progress-bar-wrap {
-            max-width: 480px; margin: 16px auto 0;
-            background: #e4e6eb; border-radius: 999px; height: 10px; overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%; width: 100%;
-            background: linear-gradient(90deg, #7c3aed, #c084fc);
-            border-radius: 999px;
-        }
-        .progress-label { text-align: center; font-size: 0.82rem; color: #65676b; margin-top: 6px; }
+        header p { color: var(--muted); font-size: 1rem; }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -36,20 +18,24 @@
             margin: 0 auto;
         }
         .card {
-            background: white; border-radius: 14px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            padding: 18px 20px; text-decoration: none; color: inherit; display: block;
+            background: var(--card-bg);
+            border-radius: 14px;
+            box-shadow: var(--shadow-sm);
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
             transition: transform 0.15s, box-shadow 0.15s;
-            border-top: 4px solid var(--accent);
+            border-top: 4px solid var(--primary);
+            margin-bottom: 0;
         }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.13); }
-        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .card-num { font-size: 0.78rem; font-weight: 700; color: var(--accent); background: var(--accent-light); padding: 3px 10px; border-radius: 999px; }
-        .card-count { font-size: 0.78rem; color: #65676b; }
-        .card h2 { font-size: 1rem; font-weight: 700; color: #050505; margin-bottom: 10px; }
-        .verb-list { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
-        .verb-list li { font-size: 0.82rem; background: #f0f2f5; border-radius: 6px; padding: 3px 8px; color: #444; }
-        .verb-list li span { color: #888; font-size: 0.75rem; margin-left: 2px; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .card-header {
+            display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 12px;
+        }
+        .card-count { font-size: 0.78rem; color: var(--muted); }
+        .card h2 { font-size: 1rem; font-weight: 700; color: var(--text-strong); margin-bottom: 10px; }
     </style>
     <script src="settings.js"></script></head>
 <body>
@@ -62,7 +48,7 @@
     </header>
 
     <div class="grid">
-        <a class="card" href="a2-1.html" style="--accent:#7c3aed;--accent-light:#f3eeff;">
+        <a class="card" href="a2-1.html">
             <div class="card-header"><span class="card-num">第 1 组 · 1–5</span><span class="card-count">6 例句 × 5</span></div>
             <h2>认知与感知动词</h2>
             <ul class="verb-list">
@@ -74,7 +60,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-2.html" style="--accent:#1877f2;--accent-light:#e7f3ff;">
+        <a class="card" href="a2-2.html">
             <div class="card-header"><span class="card-num">第 2 组 · 6–10</span><span class="card-count">6 例句 × 5</span></div>
             <h2>放置与变化动词</h2>
             <ul class="verb-list">
@@ -86,7 +72,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-3.html" style="--accent:#059669;--accent-light:#ecfdf5;">
+        <a class="card" href="a2-3.html">
             <div class="card-header"><span class="card-num">第 3 组 · 11–15</span><span class="card-count">6 例句 × 5</span></div>
             <h2>解释与日常起居</h2>
             <ul class="verb-list">
@@ -98,7 +84,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-4.html" style="--accent:#d97706;--accent-light:#fffbeb;">
+        <a class="card" href="a2-4.html">
             <div class="card-header"><span class="card-num">第 4 组 · 16–20</span><span class="card-count">6 例句 × 5</span></div>
             <h2>日常卫生与胜负</h2>
             <ul class="verb-list">
@@ -110,7 +96,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-5.html" style="--accent:#e74c3c;--accent-light:#fff0ef;">
+        <a class="card" href="a2-5.html">
             <div class="card-header"><span class="card-num">第 5 组 · 21–25</span><span class="card-count">6 例句 × 5</span></div>
             <h2>移动与传递动词</h2>
             <ul class="verb-list">
@@ -122,7 +108,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-6.html" style="--accent:#0891b2;--accent-light:#ecfeff;">
+        <a class="card" href="a2-6.html">
             <div class="card-header"><span class="card-num">第 6 组 · 26–30</span><span class="card-count">6 例句 × 5</span></div>
             <h2>想象与遇见动词</h2>
             <ul class="verb-list">
@@ -134,7 +120,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-7.html" style="--accent:#16a34a;--accent-light:#f0fdf4;">
+        <a class="card" href="a2-7.html">
             <div class="card-header"><span class="card-num">第 7 组 · 31–35</span><span class="card-count">6 例句 × 5</span></div>
             <h2>生命与感官动词</h2>
             <ul class="verb-list">
@@ -146,7 +132,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-8.html" style="--accent:#9333ea;--accent-light:#faf5ff;">
+        <a class="card" href="a2-8.html">
             <div class="card-header"><span class="card-num">第 8 组 · 36–40</span><span class="card-count">6 例句 × 5</span></div>
             <h2>携带方向动词组</h2>
             <ul class="verb-list">
@@ -158,7 +144,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-9.html" style="--accent:#db2777;--accent-light:#fdf2f8;">
+        <a class="card" href="a2-9.html">
             <div class="card-header"><span class="card-num">第 9 组 · 41–45</span><span class="card-count">6 例句 × 5</span></div>
             <h2>情感与表达动词</h2>
             <ul class="verb-list">
@@ -170,7 +156,7 @@
             </ul>
         </a>
 
-        <a class="card" href="a2-10.html" style="--accent:#ea580c;--accent-light:#fff7ed;">
+        <a class="card" href="a2-10.html">
             <div class="card-header"><span class="card-num">第 10 组 · 46–50</span><span class="card-count">6 例句 × 5</span></div>
             <h2>行动与创造动词</h2>
             <ul class="verb-list">
