@@ -186,16 +186,19 @@ const VERB_CN = {
     DISPARAÎTRE:'消失',
 };
 
-// Build correct TTS phrase with French elision.
-// For "je" + vowel-start: merge without apostrophe → "jallais", "japprenais"
-// French TTS reads "j" + vowel as [ʒ] naturally, and avoids the pause
-// that apostrophe-based contractions cause for some forms.
+// Build correct TTS phrase handling elision and liaison.
+// Merge pronoun+form without space so TTS applies correct phonology:
+//   je  + vowel → jallais [ʒa.lɛ]
+//   ils + vowel → ilsallèrent [il.za.lɛʁ]  (liaison /z/)
+//   elles/nous/vous + vowel → same treatment
 const VOWELS = /^[aeiouhyàâäéèêëîïôùûüœæ]/i;
+const LIAISON_PROS = new Set(['ils', 'elles', 'nous', 'vous']);
 function ttsPhrase(rawPronoun, form) {
     const pro = rawPronoun.split(',')[0].trim(); // drop feminine variant
     if (VOWELS.test(form)) {
-        if (pro === 'je') return 'j' + form;                       // jallais, japprenais
+        if (pro === 'je') return 'j' + form;                           // jallais
         if (pro.endsWith(' je')) return pro.slice(0, -2) + 'j' + form; // que jaille
+        if (LIAISON_PROS.has(pro)) return pro.slice(0, -1) + 'z' + form; // ilzallèrent [il.za.lɛʁ]
     }
     return pro + ' ' + form;
 }
